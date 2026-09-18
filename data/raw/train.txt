@@ -1,0 +1,10 @@
+The cat is sitting on the floor.
+The dog is running in the garden.
+The boy is reading a book.
+The girl is writing a story.
+The sun is shining in the sky.
+The moon is visible at night.
+The computer is on the table.
+The student is learning machine learning.
+The model is learning from data.
+The neural network is learning patterns.
