@@ -1,0 +1,35 @@
+# ============================================
+# Konoros / yAI — v0.1 requirements
+# Python >= 3.10
+# ============================================
+
+# --- Core deep learning ---
+torch>=2.1.0
+numpy>=1.24.0
+
+# --- Config & utilities ---
+PyYAML>=6.0
+tqdm>=4.66.0
+
+# --- Tokenizer (v0.1 dùng byte-level, không cần lib ngoài)
+# v0.2 sẽ thêm:
+# tokenizers>=0.15.0
+# sentencepiece>=0.1.99
+
+# --- Training / logging ---
+tensorboard>=2.14.0
+wandb>=0.16.0          # bật nếu muốn experiment tracking
+
+# --- Data pipeline (v0.5+) ---
+# datasets>=2.16.0
+# huggingface-hub>=0.20.0
+
+# --- Evaluation (v0.8+) ---
+# evaluate>=0.6.0
+# lm-eval>=0.4.0
+
+# --- Dev / test ---
+pytest>=7.4.0
+black>=23.0.0
+isort>=5.12.0
+ruff>=0.1.0
