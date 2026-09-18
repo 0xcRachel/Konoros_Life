@@ -1,15 +1,24 @@
 model:
-  vocab_size: 260
+  vocab_size: 320
   d_model: 256
   n_layers: 4
   n_heads: 4
+  n_kv_heads: 4
   context_length: 512
   dropout: 0.0
   rope_theta: 10000.0
   tie_weights: true
+  norm: rmsnorm
+  mlp: swiglu
+  bos_id: 258
+  eos_id: 259
+  pad_id: 256
+  unk_id: 257
 
 training:
   batch_size: 32
+  grad_accum_steps: 1
+  grad_checkpoint: false
   lr: 3e-4
   weight_decay: 0.1
   betas: [0.9, 0.95]
@@ -33,3 +42,19 @@ tokenizer:
 checkpoint:
   dir: experiments/v0.1/checkpoints
   log_dir: experiments/v0.1/logs
+
+reasoning:
+  enabled: false
+  think_bos: "<think>"
+  think_eos: "</think>"
+  answer_bos: "<answer>"
+  answer_eos: "</answer>"
+  max_think_tokens: 512
+
+sft:
+  enabled: false
+  base_ckpt: ""
+  data_path: "data/sft/security_sft.jsonl"
+  max_steps: 1000
+  lr: 1e-5
+  mask_prompt: true

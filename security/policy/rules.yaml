@@ -1,0 +1,21 @@
+# Konoros-Sec tool policy: whitelist only, no exploit/persistence/creds/evasion.
+allowed_tools:
+  - nmap_version_scan_own_host
+  - nuclei_safe_templates
+  - trivy_fs_scan
+  - public_osint_fetch
+
+denied_capabilities:
+  - exploit
+  - persistence
+  - credential_theft
+  - privilege_escalation
+  - evasion
+  - lateral_movement
+  - ransomware
+  - phishing
+
+rules:
+  intrusive_requires: [scope_validator, authorization, human_approval, audit_log]
+  sandbox: required
+  kill_switch: enabled

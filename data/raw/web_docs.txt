@@ -1,0 +1,2260 @@
+ 
+
+ 
+   
+     
+      
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+     The Python Tutorial &#8212; Python 3.14.7 documentation  
+    
+     
+     
+     
+     
+    
+      
+      
+      
+    
+      
+    
+     
+     
+     
+     
+     
+     
+     
+    
+      
+        
+      
+       
+      
+    
+
+    
+     
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+     
+ 
+     
+              
+              
+              
+               
+              
+             
+
+   
+ 
+ 
+     
+     
+         
+              
+         
+         
+             
+                 
+             
+              
+             
+                 
+                      
+                 
+                 
+                 
+             
+         
+     
+     
+         
+              
+            
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+ 
+   
+     Previous topic 
+      Changelog  
+   
+   
+     Next topic 
+       1.  Whetting Your Appetite  
+   
+   
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "tutorial/index.rst");
+            element.href = url.toString();
+        });
+    });
+   
+   
+     This page 
+     
+        Report a bug  
+        Improve this page  
+       
+         Show source
+         
+       
+      
+     
+   
+         
+     
+ 
+
+  
+     
+       Navigation 
+       
+         
+           index  
+         
+           modules  | 
+         
+           next  | 
+         
+           previous  | 
+
+             
+            Python  &#187; 
+           
+              
+              
+           
+           
+              
+           
+     
+       3.14.7 Documentation  &#187;
+     
+
+          The Python Tutorial  
+                 
+                    
+
+     
+         
+           
+           
+         
+     
+                     |
+                 
+             
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+  | 
+            
+       
+         
+
+     
+       
+         
+           
+            
+   
+   The Python Tutorial Â¶  
+ 
+ Tip 
+ This tutorial is designed for
+ programmers  that are new to the Python language,
+ not   beginners  who are new to programming. 
+ 
+ Python is an easy to learn, powerful programming language. It has efficient
+high-level data structures and a simple but effective approach to
+object-oriented programming. Pythonâs elegant syntax and dynamic typing,
+together with its interpreted nature, make it an ideal language for scripting
+and rapid application development in many areas on most platforms. 
+ The Python interpreter and the extensive standard library are freely available
+in source or binary form for all major platforms from the Python website,
+ https://www.python.org/ , and may be freely distributed. The same site also
+contains distributions of and pointers to many free third party Python modules,
+programs and tools, and additional documentation. 
+ The Python interpreter is easily extended with new functions and data types
+implemented in C or C++ (or other languages callable from C). Python is also
+suitable as an extension language for customizable applications. 
+ This tutorial introduces the reader informally to the basic concepts and
+features of the Python language and system. Be aware that it expects you to
+have a basic understanding of programming in general. It helps to have a Python
+interpreter handy for hands-on experience, but all examples are self-contained,
+so the tutorial can be read off-line as well. 
+ For a description of standard objects and modules, see   Python built-ins reference   and
+  The Python standard library  .    The Python Language Reference   gives a more formal definition of
+the language.  To write extensions in C or C++, read   Extending and Embedding the Python Interpreter   and
+  Python/C API reference manual  . There are also several books covering Python in depth. 
+ This tutorial does not attempt to be comprehensive and cover every single
+feature, or even every commonly used feature. Instead, it introduces many of
+Pythonâs most noteworthy features, and will give you a good idea of the
+languageâs flavor and style. After reading it, you will be able to read and
+write Python modules and programs, and you will be ready to learn more about the
+various Python library modules described in   The Python standard library  . 
+ The   Glossary   is also worth going through. 
+ 
+ 
+  1. Whetting Your Appetite  
+  2. Using the Python Interpreter  
+  2.1. Invoking the Interpreter  
+  2.1.1. Argument Passing  
+  2.1.2. Interactive Mode  
+ 
+ 
+  2.2. The Interpreter and Its Environment  
+  2.2.1. Source Code Encoding  
+ 
+ 
+ 
+ 
+  3. An Informal Introduction to Python  
+  3.1. Using Python as a Calculator  
+  3.1.1. Numbers  
+  3.1.2. Text  
+  3.1.3. Lists  
+ 
+ 
+  3.2. First Steps Towards Programming  
+ 
+ 
+  4. More Control Flow Tools  
+  4.1.   if   Statements  
+  4.2.   for   Statements  
+  4.3. The   range()   Function  
+  4.4.   break   and   continue   Statements  
+  4.5.   else   Clauses on Loops  
+  4.6.   pass   Statements  
+  4.7.   match   Statements  
+  4.8. Defining Functions  
+  4.9. More on Defining Functions  
+  4.9.1. Default Argument Values  
+  4.9.2. Keyword Arguments  
+  4.9.3. Special parameters  
+  4.9.3.1. Positional-or-Keyword Arguments  
+  4.9.3.2. Positional-Only Parameters  
+  4.9.3.3. Keyword-Only Arguments  
+  4.9.3.4. Function Examples  
+  4.9.3.5. Recap  
+ 
+ 
+  4.9.4. Arbitrary Argument Lists  
+  4.9.5. Unpacking Argument Lists  
+  4.9.6. Lambda Expressions  
+  4.9.7. Documentation Strings  
+  4.9.8. Function Annotations  
+ 
+ 
+  4.10. Intermezzo: Coding Style  
+ 
+ 
+  5. Data Structures  
+  5.1. More on Lists  
+  5.1.1. Using Lists as Stacks  
+  5.1.2. Using Lists as Queues  
+  5.1.3. List Comprehensions  
+  5.1.4. Nested List Comprehensions  
+ 
+ 
+  5.2. The   del   statement  
+  5.3. Tuples and Sequences  
+  5.4. Sets  
+  5.5. Dictionaries  
+  5.6. Looping Techniques  
+  5.7. More on Conditions  
+  5.8. Comparing Sequences and Other Types  
+ 
+ 
+  6. Modules  
+  6.1. More on Modules  
+  6.1.1. Executing modules as scripts  
+  6.1.2. The Module Search Path  
+  6.1.3. âCompiledâ Python files  
+ 
+ 
+  6.2. Standard Modules  
+  6.3. The   dir()   Function  
+  6.4. Packages  
+  6.4.1. Importing * From a Package  
+  6.4.2. Intra-package References  
+ 
+ 
+ 
+ 
+  7. Input and Output  
+  7.1. Fancier Output Formatting  
+  7.1.1. Formatted String Literals  
+  7.1.2. The String format() Method  
+  7.1.3. Manual String Formatting  
+  7.1.4. Old string formatting  
+ 
+ 
+  7.2. Reading and Writing Files  
+  7.2.1. Methods of File Objects  
+  7.2.2. Saving structured data with   json    
+ 
+ 
+ 
+ 
+  8. Errors and Exceptions  
+  8.1. Syntax Errors  
+  8.2. Exceptions  
+  8.3. Handling Exceptions  
+  8.4. Raising Exceptions  
+  8.5. Exception Chaining  
+  8.6. User-defined Exceptions  
+  8.7. Defining Clean-up Actions  
+  8.8. Predefined Clean-up Actions  
+  8.9. Raising and Handling Multiple Unrelated Exceptions  
+  8.10. Enriching Exceptions with Notes  
+ 
+ 
+  9. Classes  
+  9.1. A Word About Names and Objects  
+  9.2. Python Scopes and Namespaces  
+  9.2.1. Scopes and Namespaces Example  
+ 
+ 
+  9.3. A First Look at Classes  
+  9.3.1. Class Definition Syntax  
+  9.3.2. Class Objects  
+  9.3.3. Instance Objects  
+  9.3.4. Method Objects  
+  9.3.5. Class and Instance Variables  
+ 
+ 
+  9.4. Random Remarks  
+  9.5. Inheritance  
+  9.5.1. Multiple Inheritance  
+ 
+ 
+  9.6. Private Variables  
+  9.7. Odds and Ends  
+  9.8. Iterators  
+  9.9. Generators  
+  9.10. Generator Expressions  
+ 
+ 
+  10. Brief tour of the standard library  
+  10.1. Operating system interface  
+  10.2. File wildcards  
+  10.3. Command-line arguments  
+  10.4. Error output redirection and program termination  
+  10.5. String pattern matching  
+  10.6. Mathematics  
+  10.7. Internet access  
+  10.8. Dates and times  
+  10.9. Data compression  
+  10.10. Performance measurement  
+  10.11. Quality control  
+  10.12. Batteries included  
+ 
+ 
+  11. Brief tour of the standard library â part II  
+  11.1. Output formatting  
+  11.2. Templating  
+  11.3. Working with binary data record layouts  
+  11.4. Multi-threading  
+  11.5. Logging  
+  11.6. Weak references  
+  11.7. Tools for working with lists  
+  11.8. Decimal floating-point arithmetic  
+ 
+ 
+  12. Virtual Environments and Packages  
+  12.1. Introduction  
+  12.2. Creating Virtual Environments  
+  12.3. Managing Packages with pip  
+ 
+ 
+  13. What Now?  
+  14. Interactive Input Editing and History Substitution  
+  14.1. Tab Completion and History Editing  
+  14.2. Alternatives to the Interactive Interpreter  
+ 
+ 
+  15. Floating-Point Arithmetic:  Issues and Limitations  
+  15.1. Representation Error  
+ 
+ 
+  16. Appendix  
+  16.1. Interactive Mode  
+  16.1.1. Error Handling  
+  16.1.2. Executable Python Scripts  
+  16.1.3. The Interactive Startup File  
+  16.1.4. The Customization Modules  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+              
+           
+         
+       
+       
+         
+   
+     Previous topic 
+      Changelog  
+   
+   
+     Next topic 
+       1.  Whetting Your Appetite  
+   
+   
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "tutorial/index.rst");
+            element.href = url.toString();
+        });
+    });
+   
+   
+     This page 
+     
+        Report a bug  
+        Improve this page  
+       
+         Show source
+         
+       
+      
+     
+   
+         
+ 
+ Â« 
+ 
+
+       
+        
+       
+     
+       Navigation 
+       
+         
+           index  
+         
+           modules  | 
+         
+           next  | 
+         
+           previous  | 
+
+             
+            Python  &#187; 
+           
+              
+              
+           
+           
+              
+           
+     
+       3.14.7 Documentation  &#187;
+     
+
+          The Python Tutorial  
+                 
+                    
+
+     
+         
+           
+           
+         
+     
+                     |
+                 
+             
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+  | 
+            
+       
+       
+     
+    &copy;  Copyright  2001 Python Software Foundation.
+     
+    This page is licensed under the Python Software Foundation License Version 2.
+     
+    Examples, recipes, and other code in the documentation are additionally licensed under the Zero Clause BSD License.
+     
+    
+      See  History and License  for more information. 
+    
+    
+     
+
+    The Python Software Foundation is a non-profit corporation.
+ Please donate. 
+ 
+     
+      Last updated on Sep 18, 2026 (01:52 UTC).
+    
+       Found a bug ?
+    
+     
+
+    Created using  Sphinx  8.2.3.
+     
+
+      
+   
+ 
+
+ 
+
+ 
+   
+     
+      
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+     secrets â Generate secure random numbers for managing secrets &#8212; Python 3.14.7 documentation  
+    
+     
+     
+     
+     
+    
+      
+      
+      
+    
+      
+    
+     
+     
+     
+     
+     
+     
+     
+    
+      
+        
+      
+       
+      
+    
+
+    
+     
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+     
+ 
+     
+              
+              
+              
+               
+              
+             
+
+   
+ 
+ 
+     
+     
+         
+              
+         
+         
+             
+                 
+             
+              
+             
+                 
+                      
+                 
+                 
+                 
+             
+         
+     
+     
+         
+              
+            
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+ 
+   
+      Table of Contents  
+     
+    secrets   â Generate secure random numbers for managing secrets  
+  Random numbers  
+  Generating tokens  
+  How many bytes should tokens use?  
+ 
+ 
+  Other functions  
+  Recipes and best practices  
+ 
+ 
+ 
+
+   
+   
+     Previous topic 
+        hmac   â Keyed-Hashing for Message Authentication  
+   
+   
+     Next topic 
+      Generic Operating System Services  
+   
+   
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/secrets.rst");
+            element.href = url.toString();
+        });
+    });
+   
+   
+     This page 
+     
+        Report a bug  
+        Improve this page  
+       
+         Show source
+         
+       
+      
+     
+   
+         
+     
+ 
+
+  
+     
+       Navigation 
+       
+         
+           index  
+         
+           modules  | 
+         
+           next  | 
+         
+           previous  | 
+
+             
+            Python  &#187; 
+           
+              
+              
+           
+           
+              
+           
+     
+       3.14.7 Documentation  &#187;
+     
+
+            The Python standard library  &#187; 
+            Cryptographic Services  &#187; 
+            secrets   â Generate secure random numbers for managing secrets  
+                 
+                    
+
+     
+         
+           
+           
+         
+     
+                     |
+                 
+             
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+  | 
+            
+       
+         
+
+     
+       
+         
+           
+            
+   
+     secrets   â Generate secure random numbers for managing secrets Â¶  
+ 
+  Added in version 3.6.  
+ 
+  Source code:   Lib/secrets.py  
+ 
+ The   secrets   module is used for generating cryptographically strong
+random numbers suitable for managing data such as passwords, account
+authentication, security tokens, and related secrets. 
+ In particular,   secrets   should be used in preference to the
+default pseudo-random number generator in the    random    module, which
+is designed for modelling and simulation, not security or cryptography. 
+ 
+ See also 
+     PEP 506   
+ 
+ 
+ Random numbers Â¶  
+ The   secrets   module provides access to the most secure source of
+randomness that your operating system provides. 
+ 
+ 
+   class        secrets.    SystemRandom   Â¶  
+  A class for generating random numbers using the highest-quality
+sources provided by the operating system.  See
+   random.SystemRandom    for additional details. 
+  
+
+ 
+ 
+  secrets.    choice   (    seq    )  Â¶  
+  Return a randomly chosen element from a non-empty sequence. 
+  
+
+ 
+ 
+  secrets.    randbelow   (    exclusive_upper_bound    )  Â¶  
+  Return a random int in the range [0,  exclusive_upper_bound ). 
+  
+
+ 
+ 
+  secrets.    randbits   (    k    )  Â¶  
+  Return a non-negative int with  k  random bits. 
+  
+
+ 
+ 
+ Generating tokens Â¶  
+ The   secrets   module provides functions for generating secure
+tokens, suitable for applications such as [REDACTED_SECRET]
+hard-to-guess URLs, and similar. 
+ 
+ 
+  secrets.    token_bytes   (    nbytes    =    None    )  Â¶  
+  Return a random byte string containing  nbytes  number of bytes. 
+ If  nbytes  is not specified or   None  ,    DEFAULT_ENTROPY   
+is used instead. 
+      &gt;&gt;&gt;   token_bytes  (  16  ) 
+ b'\xebr\x17D*t\xae\xd4\xe3S\xb6\xe2\xebP1\x8b' 
+  
+ 
+  
+
+ 
+ 
+  secrets.    token_hex   (    nbytes    =    None    )  Â¶  
+  Return a random text string, in hexadecimal.  The string has  nbytes 
+random bytes, each byte converted to two hex digits. 
+ If  nbytes  is not specified or   None  ,    DEFAULT_ENTROPY   
+is used instead. 
+      &gt;&gt;&gt;   token_hex  (  16  ) 
+ 'f9bf78b9a18ce6d46a0cd2b0b86df9da' 
+  
+ 
+  
+
+ 
+ 
+  secrets.    token_urlsafe   (    nbytes    =    None    )  Â¶  
+  Return a random URL-safe text string, containing  nbytes  random
+bytes.  The text is Base64 encoded, so on average each byte results
+in approximately 1.3 characters. 
+ If  nbytes  is not specified or   None  ,    DEFAULT_ENTROPY   
+is used instead. 
+      &gt;&gt;&gt;   token_urlsafe  (  16  ) 
+ 'Drmhze6EPcv0fN_81Bj-nA' 
+  
+ 
+  
+
+ 
+ How many bytes should tokens use? Â¶  
+ To be secure against
+ brute-force attacks ,
+tokens need to have sufficient randomness.  Unfortunately, what is
+considered sufficient will necessarily increase as computers get more
+powerful and able to make more guesses in a shorter period.  As of 2015,
+it is believed that 32 bytes (256 bits) of randomness is sufficient for
+the typical use-case expected for the   secrets   module. 
+ For those who want to manage their own token length, you can explicitly
+specify how much randomness is used for tokens by giving an    int   
+argument to the various   token_*   functions.  That argument is taken
+as the number of bytes of randomness to use. 
+ Otherwise, if no argument is provided, or if the argument is   None  ,
+the   token_*   functions use    DEFAULT_ENTROPY    instead. 
+ 
+ 
+  secrets.    DEFAULT_ENTROPY   Â¶  
+  Default number of bytes of randomness used by the   token_*   functions. 
+ The exact value is subject to change at any time, including during
+maintenance releases. 
+  
+
+ 
+ 
+ 
+ Other functions Â¶  
+ 
+ 
+  secrets.    compare_digest   (    a   ,    b    )  Â¶  
+  Return   True   if strings or
+  bytes-like objects  
+ a  and  b  are equal, otherwise   False  ,
+using a âconstant-time compareâ to reduce the risk of
+ timing attacks .
+See    hmac.compare_digest()    for additional details. 
+  
+
+ 
+ 
+ Recipes and best practices Â¶  
+ This section shows recipes and best practices for using   secrets  
+to manage a basic level of security. 
+ Generate an eight-character alphanumeric [REDACTED_SECRET]     string 
+ import     secrets 
+ alphabet   =   string  .  ascii_letters   +   string  .  digits 
+ password   =   ''  .  join  (  secrets  .  choice  (  alphabet  )   for   i   in   range  (  8  )) 
+  
+ 
+ 
+ Note 
+ Applications should not
+    store passwords in a recoverable format  ,
+whether plain text or encrypted.  They should be salted and hashed
+using a cryptographically strong one-way (irreversible) hash function. 
+ 
+ Generate a ten-character alphanumeric [REDACTED_SECRET] at least one
+lowercase character, at least one uppercase character, and at least
+three digits: 
+      import     string 
+ import     secrets 
+ alphabet   =   string  .  ascii_letters   +   string  .  digits 
+ while   True  : 
+     password   =   ''  .  join  (  secrets  .  choice  (  alphabet  )   for   i   in   range  (  10  )) 
+     if   (  any  (  c  .  islower  ()   for   c   in   password  ) 
+             and   any  (  c  .  isupper  ()   for   c   in   password  ) 
+             and   sum  (  c  .  isdigit  ()   for   c   in   password  )   &gt;=   3  ): 
+         break 
+  
+ 
+ Generate an  XKCD-style passphrase : 
+      import     secrets 
+ # On standard Linux systems, use a convenient dictionary file. 
+ # Other platforms may need to provide their own word-list. 
+ with   open  (  '/usr/share/dict/words'  )   as   f  : 
+     words   =   [  word  .  strip  ()   for   word   in   f  ] 
+     password   =   ' '  .  join  (  secrets  .  choice  (  words  )   for   i   in   range  (  4  )) 
+  
+ 
+ Generate a hard-to-guess temporary URL containing a security token
+suitable for [REDACTED_SECRET] applications: 
+      import     secrets 
+ url   =   'https://example.com/reset='   +   secrets  .  token_urlsafe  () 
+  
+ 
+ 
+ 
+
+
+              
+           
+         
+       
+       
+         
+   
+      Table of Contents  
+     
+    secrets   â Generate secure random numbers for managing secrets  
+  Random numbers  
+  Generating tokens  
+  How many bytes should tokens use?  
+ 
+ 
+  Other functions  
+  Recipes and best practices  
+ 
+ 
+ 
+
+   
+   
+     Previous topic 
+        hmac   â Keyed-Hashing for Message Authentication  
+   
+   
+     Next topic 
+      Generic Operating System Services  
+   
+   
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/secrets.rst");
+            element.href = url.toString();
+        });
+    });
+   
+   
+     This page 
+     
+        Report a bug  
+        Improve this page  
+       
+         Show source
+         
+       
+      
+     
+   
+         
+ 
+ Â« 
+ 
+
+       
+        
+       
+     
+       Navigation 
+       
+         
+           index  
+         
+           modules  | 
+         
+           next  | 
+         
+           previous  | 
+
+             
+            Python  &#187; 
+           
+              
+              
+           
+           
+              
+           
+     
+       3.14.7 Documentation  &#187;
+     
+
+            The Python standard library  &#187; 
+            Cryptographic Services  &#187; 
+            secrets   â Generate secure random numbers for managing secrets  
+                 
+                    
+
+     
+         
+           
+           
+         
+     
+                     |
+                 
+             
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+  | 
+            
+       
+       
+     
+    &copy;  Copyright  2001 Python Software Foundation.
+     
+    This page is licensed under the Python Software Foundation License Version 2.
+     
+    Examples, recipes, and other code in the documentation are additionally licensed under the Zero Clause BSD License.
+     
+    
+      See  History and License  for more information. 
+    
+    
+     
+
+    The Python Software Foundation is a non-profit corporation.
+ Please donate. 
+ 
+     
+      Last updated on Sep 18, 2026 (01:52 UTC).
+    
+       Found a bug ?
+    
+     
+
+    Created using  Sphinx  8.2.3.
+     
+
+      
+   
+ 
+
+ 
+
+ 
+   
+     
+      
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+     hashlib â Secure hashes and message digests &#8212; Python 3.14.7 documentation  
+    
+     
+     
+     
+     
+    
+      
+      
+      
+    
+      
+    
+     
+     
+     
+     
+     
+     
+     
+    
+      
+        
+      
+       
+      
+    
+
+    
+     
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+     
+ 
+     
+              
+              
+              
+               
+              
+             
+
+   
+ 
+ 
+     
+     
+         
+              
+         
+         
+             
+                 
+             
+              
+             
+                 
+                      
+                 
+                 
+                 
+             
+         
+     
+     
+         
+              
+            
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+ 
+   
+      Table of Contents  
+     
+    hashlib   â Secure hashes and message digests  
+  Hash algorithms  
+  Usage  
+  Constructors  
+  Attributes  
+  Hash Objects  
+  SHAKE variable length digests  
+  File hashing  
+  Key derivation  
+  BLAKE2  
+  Creating hash objects  
+  Constants  
+  Examples  
+  Simple hashing  
+  Using different digest sizes  
+  Keyed hashing  
+  Randomized hashing  
+  Personalization  
+  Tree mode  
+ 
+ 
+  Credits  
+ 
+ 
+ 
+ 
+ 
+
+   
+   
+     Previous topic 
+      Cryptographic Services  
+   
+   
+     Next topic 
+        hmac   â Keyed-Hashing for Message Authentication  
+   
+   
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/hashlib.rst");
+            element.href = url.toString();
+        });
+    });
+   
+   
+     This page 
+     
+        Report a bug  
+        Improve this page  
+       
+         Show source
+         
+       
+      
+     
+   
+         
+     
+ 
+
+  
+     
+       Navigation 
+       
+         
+           index  
+         
+           modules  | 
+         
+           next  | 
+         
+           previous  | 
+
+             
+            Python  &#187; 
+           
+              
+              
+           
+           
+              
+           
+     
+       3.14.7 Documentation  &#187;
+     
+
+            The Python standard library  &#187; 
+            Cryptographic Services  &#187; 
+            hashlib   â Secure hashes and message digests  
+                 
+                    
+
+     
+         
+           
+           
+         
+     
+                     |
+                 
+             
+ 
+    Theme
+     
+         Auto 
+         Light 
+         Dark 
+     
+  | 
+            
+       
+         
+
+     
+       
+         
+           
+            
+   
+     hashlib   â Secure hashes and message digests Â¶  
+  Source code:   Lib/hashlib.py  
+   
+ This module implements a common interface to many different hash algorithms.
+Included are the FIPS secure hash algorithms SHA224, SHA256, SHA384, SHA512,
+(defined in  the FIPS 180-4 standard ), the SHA-3 series (defined in  the FIPS
+202 standard ) as well as the legacy algorithms SHA1 ( formerly part of FIPS )
+and the MD5 algorithm (defined in internet     RFC 1321  ). 
+ 
+ Note 
+ If you want the adler32 or crc32 hash functions, they are available in
+the    zlib    module. 
+ 
+ 
+   Hash algorithms Â¶  
+ There is one constructor method named for each type of  hash .  All return
+a hash object with the same simple interface. For example: use    sha256()   
+to create a SHA-256 hash object. You can now feed this object with
+  bytes-like objects   (normally    bytes   ) using
+the    update    method.  At any point you can ask it for the
+ digest  of the concatenation of the data fed to it so far using the
+   digest()    or    hexdigest()    methods. 
+ To allow multithreading, the Python   GIL   is released while computing a
+hash supplied more than 2047 bytes of data at once in its constructor or
+   .update    method. 
+ Constructors for hash algorithms that are always present in this module are
+   sha1()   ,    sha224()   ,    sha256()   ,    sha384()   ,    sha512()   ,
+   sha3_224()   ,    sha3_256()   ,    sha3_384()   ,    sha3_512()   ,
+   shake_128()   ,    shake_256()   ,    blake2b()   , and    blake2s()   .
+   md5()    is normally available as well, though it may be missing or blocked
+if you are using a rare âFIPS compliantâ build of Python.
+These correspond to    algorithms_guaranteed   . 
+ Additional algorithms may also be available if your Python distributionâs
+  hashlib   was linked against a build of OpenSSL that provides others.
+Others  are not guaranteed available  on all installations and will only be
+accessible by name via    new()   .  See    algorithms_available   . 
+ 
+ Warning 
+ Some algorithms have known hash collision weaknesses (including MD5 and
+SHA1). Refer to  Attacks on cryptographic hash algorithms  and the
+ hashlib-seealso  section at the end of this document. 
+ 
+ 
+  Added in version 3.6:  SHA3 (Keccak) and SHAKE constructors    sha3_224()   ,    sha3_256()   ,
+   sha3_384()   ,    sha3_512()   ,    shake_128()   ,    shake_256()   
+were added.
+   blake2b()    and    blake2s()    were added. 
+ 
+ 
+  Changed in version 3.9:  All hashlib constructors take a keyword-only argument  usedforsecurity 
+with default value   True  . A false value allows the use of insecure and
+blocked hashing algorithms in restricted environments.   False   indicates
+that the hashing algorithm is not used in a security context, e.g. as a
+non-cryptographic one-way compression function. 
+ 
+ 
+  Changed in version 3.9:  Hashlib now uses SHA3 and SHAKE from OpenSSL if it provides it. 
+ 
+ 
+  Changed in version 3.12:  For any of the MD5, SHA1, SHA2, or SHA3 algorithms that the linked
+OpenSSL does not provide we fall back to a verified implementation from
+the  HACL* project . 
+ 
+ 
+ 
+ Usage Â¶  
+ To obtain the digest of the byte string   b&quot;Nobody   inspects   the   spammish 
+ repetition&quot;  : 
+      &gt;&gt;&gt;   import     hashlib 
+ &gt;&gt;&gt;   m   =   hashlib  .  sha256  () 
+ &gt;&gt;&gt;   m  .  update  (  b  "Nobody inspects"  ) 
+ &gt;&gt;&gt;   m  .  update  (  b  " the spammish repetition"  ) 
+ &gt;&gt;&gt;   m  .  digest  () 
+ b'\x03\x1e\xdd}Ae\x15\x93\xc5\xfe\\\x00o\xa5u+7\xfd\xdf\xf7\xbcN\x84:\xa6\xaf\x0c\x95\x0fK\x94\x06' 
+ &gt;&gt;&gt;   m  .  hexdigest  () 
+ '031edd7d[REDACTED_PHONE]c5fe5c006fa5752b37fddff7bc4e843aa6af0c950f4b9406' 
+  
+ 
+ More condensed: 
+      &gt;&gt;&gt;   hashlib  .  sha256  (  b  "Nobody inspects the spammish repetition"  )  .  hexdigest  () 
+ '031edd7d[REDACTED_PHONE]c5fe5c006fa5752b37fddff7bc4e843aa6af0c950f4b9406' 
+  
+ 
+ 
+ 
+ Constructors Â¶  
+ 
+ 
+  hashlib.    new   (    name   ,  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+  Is a generic constructor that takes the string  name  of the desired
+algorithm as its first parameter.  It also exists to allow access to the
+above listed hashes as well as any other algorithms that your OpenSSL
+library may offer. 
+  
+
+ Using    new()    with an algorithm name: 
+      &gt;&gt;&gt;   h   =   hashlib  .  new  (  'sha256'  ) 
+ &gt;&gt;&gt;   h  .  update  (  b  "Nobody inspects the spammish repetition"  ) 
+ &gt;&gt;&gt;   h  .  hexdigest  () 
+ '031edd7d[REDACTED_PHONE]c5fe5c006fa5752b37fddff7bc4e843aa6af0c950f4b9406' 
+  
+ 
+ 
+ 
+  hashlib.    md5   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha1   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha224   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha256   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha384   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha512   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha3_224   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha3_256   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha3_384   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    sha3_512   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ Named constructors such as these are faster than passing an algorithm name to
+   new()   . 
+ 
+ 
+ Attributes Â¶  
+ Hashlib provides the following constant module attributes: 
+ 
+ 
+  hashlib.    algorithms_guaranteed   Â¶  
+  A set containing the names of the hash algorithms guaranteed to be supported
+by this module on all platforms.  Note that âmd5â is in this list despite
+some upstream vendors offering an odd âFIPS compliantâ Python build that
+excludes it. 
+ 
+  Added in version 3.2.  
+ 
+  
+
+ 
+ 
+  hashlib.    algorithms_available   Â¶  
+  A set containing the names of the hash algorithms that are available in the
+running Python interpreter.  These names will be recognized when passed to
+   new()   .     algorithms_guaranteed    will always be a subset.  The
+same algorithm may appear multiple times in this set under different names
+(thanks to OpenSSL). 
+ 
+  Added in version 3.2.  
+ 
+  
+
+ 
+ 
+ Hash Objects Â¶  
+ The following values are provided as constant attributes of the hash objects
+returned by the constructors: 
+ 
+ 
+  hash.    digest_size   Â¶  
+  The size of the resulting hash in bytes. 
+  
+
+ 
+ 
+  hash.    block_size   Â¶  
+  The internal block size of the hash algorithm in bytes. 
+  
+
+ A hash object has the following attributes: 
+ 
+ 
+  hash.    name   Â¶  
+  The canonical name of this hash, always lowercase and always suitable as a
+parameter to    new()    to create another hash of this type. 
+ 
+  Changed in version 3.4:  The name attribute has been present in CPython since its inception, but
+until Python 3.4 was not formally specified, so may not exist on some
+platforms. 
+ 
+  
+
+ A hash object has the following methods: 
+ 
+ 
+  hash.    update   (    data    )  Â¶  
+  Update the hash object with the   bytes-like object  .
+Repeated calls are equivalent to a single call with the
+concatenation of all the arguments:   m.update(a);   m.update(b)   is
+equivalent to   m.update(a+b)  . 
+  
+
+ 
+ 
+  hash.    digest   (  )  Â¶  
+  Return the digest of the data passed to the    update()    method so far.
+This is a bytes object of size    digest_size    which may contain bytes in
+the whole range from 0 to 255. 
+  
+
+ 
+ 
+  hash.    hexdigest   (  )  Â¶  
+  Like    digest()    except the digest is returned as a string object of
+double length, containing only hexadecimal digits.  This may be used to
+exchange the value safely in email or other non-binary environments. 
+  
+
+ 
+ 
+  hash.    copy   (  )  Â¶  
+  Return a copy (âcloneâ) of the hash object.  This can be used to efficiently
+compute the digests of data sharing a common initial substring. 
+  
+
+ 
+ 
+ SHAKE variable length digests Â¶  
+ 
+ 
+  hashlib.    shake_128   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    shake_256   (  [    data   ,  ]    *   ,    usedforsecurity=True    )  Â¶  
+   
+
+ The    shake_128()    and    shake_256()    algorithms provide variable
+length digests with length_in_bits//2 up to 128 or 256 bits of security.
+As such, their digest methods require a length. Maximum length is not limited
+by the SHAKE algorithm. 
+ 
+ 
+  shake.    digest   (    length    )  Â¶  
+  Return the digest of the data passed to the    update()    method so far.
+This is a bytes object of size  length  which may contain bytes in
+the whole range from 0 to 255. 
+  
+
+ 
+ 
+  shake.    hexdigest   (    length    )  Â¶  
+  Like    digest()    except the digest is returned as a string object of
+double length, containing only hexadecimal digits.  This may be used to
+exchange the value in email or other non-binary environments. 
+  
+
+ Example use: 
+      &gt;&gt;&gt;   h   =   hashlib  .  shake_256  (  b  'Nobody inspects the spammish repetition'  ) 
+ &gt;&gt;&gt;   h  .  hexdigest  (  20  ) 
+ '44709d6fcb83d92a76dcb0b668c98e1b1d3dafe7' 
+  
+ 
+ 
+ 
+ File hashing Â¶  
+ The hashlib module provides a helper function for efficient hashing of
+a file or file-like object. 
+ 
+ 
+  hashlib.    file_digest   (    fileobj   ,    digest   ,     /     )  Â¶  
+  Return a digest object that has been updated with contents of file object. 
+  fileobj  must be a file-like object opened for reading in binary mode.
+It accepts file objects from  builtin    open()   ,    BytesIO   
+instances, SocketIO objects from    socket.socket.makefile()   , and
+similar.  fileobj  must be opened in blocking mode, otherwise a
+   BlockingIOError    may be raised. 
+ The function may bypass Pythonâs I/O and use the file descriptor
+from    fileno()    directly.  fileobj  must be assumed to be
+in an unknown state after this function returns or raises. It is up to
+the caller to close  fileobj . 
+  digest  must either be a hash algorithm name as a  str , a hash
+constructor, or a callable that returns a hash object. 
+ Example: 
+      &gt;&gt;&gt;   import     io  ,     hashlib  ,     hmac 
+ &gt;&gt;&gt;   with   open  (  "library/hashlib.rst"  ,   "rb"  )   as   f  : 
+ ...       digest   =   hashlib  .  file_digest  (  f  ,   "sha256"  ) 
+ ... 
+ &gt;&gt;&gt;   digest  .  hexdigest  () 
+ '...' 
+  
+ 
+      &gt;&gt;&gt;   buf   =   io  .  BytesIO  (  b  "somedata"  ) 
+ &gt;&gt;&gt;   mac1   =   hmac  .  HMAC  (  b  "key"  ,   digestmod  =  hashlib  .  sha512  ) 
+ &gt;&gt;&gt;   digest   =   hashlib  .  file_digest  (  buf  ,   lambda  :   mac1  ) 
+  
+ 
+      &gt;&gt;&gt;   digest   is   mac1 
+ True 
+ &gt;&gt;&gt;   mac2   =   hmac  .  HMAC  (  b  "key"  ,   b  "somedata"  ,   digestmod  =  hashlib  .  sha512  ) 
+ &gt;&gt;&gt;   mac1  .  digest  ()   ==   mac2  .  digest  () 
+ True 
+  
+ 
+ 
+  Added in version 3.11.  
+ 
+ 
+  Changed in version 3.14:  Now raises a    BlockingIOError    if the file is opened in non-blocking
+mode. Previously, spurious null bytes were added to the digest. 
+ 
+  
+
+ 
+ 
+ Key derivation Â¶  
+ Key derivation and key stretching algorithms are designed for secure [REDACTED_SECRET] Naive algorithms such as   sha1(password)   are not resistant against
+brute-force attacks. A good [REDACTED_SECRET] function must be tunable, slow, and
+include a  salt . 
+ 
+ 
+  hashlib.    pbkdf2_hmac   (    hash_name   ,    password   ,    salt   ,    iterations   ,    dklen    =    None    )  Â¶  
+  The function provides PKCS#5 password-based key derivation function 2. It
+uses HMAC as pseudorandom function. 
+ The string  hash_name  is the desired name of the hash digest algorithm for
+HMAC, e.g. âsha1â or âsha256â.  password  and  salt  are interpreted as
+buffers of bytes. Applications and libraries should limit  password  to
+a sensible length (e.g. 1024).  salt  should be about 16 or more bytes from
+a proper source, e.g.    os.urandom()   . 
+ The number of  iterations  should be chosen based on the hash algorithm and
+computing power. As of 2022, hundreds of thousands of iterations of SHA-256
+are suggested. For rationale as to why and how to choose what is best for
+your application, read  Appendix A.2.2  of  NIST-SP-800-132 . The answers
+on the  stackexchange pbkdf2 iterations question  explain in detail. 
+  dklen  is the length of the derived key in bytes. If  dklen  is   None   then the
+digest size of the hash algorithm  hash_name  is used, e.g. 64 for SHA-512. 
+      &gt;&gt;&gt;   from     hashlib     import   pbkdf2_hmac 
+ &gt;&gt;&gt;   our_app_iters   =   500_000    # Application specific, read above. 
+ &gt;&gt;&gt;   dk   =   pbkdf2_hmac  (  'sha256'  ,   b  'password'  ,   b  'bad salt'   *   2  ,   our_app_iters  ) 
+ &gt;&gt;&gt;   dk  .  hex  () 
+ '15530bba[REDACTED_PHONE]db778f2c6f8104d3aaf9d[REDACTED_PHONE]c8c4a641c8d000a9' 
+  
+ 
+ Function only available when Python is compiled with OpenSSL. 
+ 
+  Added in version 3.4.  
+ 
+ 
+  Changed in version 3.12:  Function now only available when Python is built with OpenSSL. The slow
+pure Python implementation has been removed. 
+ 
+  
+
+ 
+ 
+  hashlib.    scrypt   (    password   ,     *    ,    salt   ,    n   ,    r   ,    p   ,    maxmem    =    0   ,    dklen    =    64    )  Â¶  
+  The function provides scrypt password-based key derivation function as
+defined in     RFC 7914  . 
+  password  and  salt  must be   bytes-like objects  .  Applications and libraries should limit  password 
+to a sensible length (e.g. 1024).   salt  should be about 16 or more
+bytes from a proper source, e.g.    os.urandom()   . 
+  n  is the CPU/Memory cost factor,  r  the block size,  p  parallelization
+factor and  maxmem  limits memory (OpenSSL 1.1.0 defaults to 32 MiB).
+ dklen  is the length of the derived key in bytes. 
+ 
+  Added in version 3.6.  
+ 
+  
+
+ 
+ 
+   BLAKE2 Â¶  
+  BLAKE2  is a cryptographic hash function defined in     RFC 7693   that comes in two
+flavors: 
+ 
+   BLAKE2b , optimized for 64-bit platforms and produces digests of any size
+between 1 and 64 bytes,  
+   BLAKE2s , optimized for 8- to 32-bit platforms and produces digests of any
+size between 1 and 32 bytes.  
+ 
+ BLAKE2 supports  keyed mode  (a faster and simpler replacement for  HMAC ),
+ salted hashing ,  personalization , and  tree hashing . 
+ Hash objects from this module follow the API of standard libraryâs
+  hashlib   objects. 
+ 
+ Creating hash objects Â¶  
+ New hash objects are created by calling constructor functions: 
+ 
+ 
+  hashlib.    blake2b   (    data    =    b''   ,     *    ,    digest_size    =    64   ,    key    =    b''   ,    salt    =    b''   ,    person    =    b''   ,    fanout    =    1   ,    depth    =    1   ,    leaf_size    =    0   ,    node_offset    =    0   ,    node_depth    =    0   ,    inner_size    =    0   ,    last_node    =    False   ,    usedforsecurity    =    True    )  Â¶  
+   
+
+ 
+ 
+  hashlib.    blake2s   (    data    =    b''   ,     *    ,    digest_size    =    32   ,    key    =    b''   ,    salt    =    b''   ,    person    =    b''   ,    fanout    =    1   ,    depth    =    1   ,    leaf_size    =    0   ,    node_offset    =    0   ,    node_depth    =    0   ,    inner_size    =    0   ,    last_node    =    False   ,    usedforsecurity    =    True    )  Â¶  
+   
+
+ These functions return the corresponding hash objects for calculating
+BLAKE2b or BLAKE2s. They optionally take these general parameters: 
+ 
+   data : initial chunk of data to hash, which must be
+  bytes-like object  .  It can be passed only as positional argument.  
+   digest_size : size of output digest in bytes.  
+   key : key for keyed hashing (up to 64 bytes for BLAKE2b, up to 32 bytes for
+BLAKE2s).  
+   salt : salt for randomized hashing (up to 16 bytes for BLAKE2b, up to 8
+bytes for BLAKE2s).  
+   person : personalization string (up to 16 bytes for BLAKE2b, up to 8 bytes
+for BLAKE2s).  
+ 
+ The following table shows limits for general parameters (in bytes): 
+ 
+ 
+   Hash  
+  digest_size  
+  len(key)  
+  len(salt)  
+  len(person)  
+ 
+ 
+ 
+   BLAKE2b  
+  64  
+  64  
+  16  
+  16  
+ 
+   BLAKE2s  
+  32  
+  32  
+  8  
+  8  
+ 
+ 
+ 
+ 
+ Note 
+ BLAKE2 specification defines constant lengths for salt and personalization
+parameters, however, for convenience, this implementation accepts byte
+strings of any size up to the specified length. If the length of the
+parameter is less than specified, it is padded with zeros, thus, for
+example,   b'salt'   and   b'salt\x00'   is the same value. (This is not
+the case for  key .) 
+ 
+ These sizes are available as module  constants  described below. 
+ Constructor functions also accept the following tree hashing parameters: 
+ 
+   fanout : fanout (0 to 255, 0 if unlimited, 1 in
+
+
+       
+       
+         
+           
+           
+           Security | MDN 
+          
+           try {
+  document.documentElement.dataset.theme =
+    localStorage.getItem("theme") || "light dark";
+} catch (error) {
+  console.warn("Unable to set theme", error);
+}
+
+try {
+  if (localStorage.getItem("nop") === "yes") {
+    document.documentElement.dataset["nop"] = "yes";
+  }
+} catch (error) {
+  console.warn("Unable to set nop", error);
+}
+ 
+                           
+            
+          
+                    
+          
+     
+     
+                
+           
+           
+           
+           
+           
+         
+        
+       
+         
+       
+         Skip to main content 
+       
+       
+         Skip to search 
+       
+     
+         
+            
+         
+         
+          
+       
+         
+       
+         
+           MDN 
+           
+           
+           
+         
+       
+     
+         
+             .mdn-search-button{align-items:center;background-color:var(--color-background-page);border:1px solid var(--color-border-primary);border-radius:var(--radius-full);color:var(--color-text-primary);cursor:pointer;display:flex;justify-content:space-between;margin:0;padding:.25rem .25rem .25rem .75rem;width:5rem}.mdn-search-button:hover{background-color:var(--color-background-secondary)}.mdn-search-button:before{content:"";height:18px;width:15px;--csstools-light-dark-toggle-95231fd5-0:var(--csstools-color-scheme--light) var(--color-blue-80);border-bottom:2px solid var(--csstools-light-dark-toggle-95231fd5-0,var(--color-blue-50))}@supports (color:light-dark(red,red)){.mdn-search-button:before{border-bottom:2px solid light-dark(var(--color-blue-50),var(--color-blue-80))}}    
+            
+        
+         
+          
+         
+           
+       
+         
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       HTML 
+                     
+                     
+                       
+                         HTML: Markup language 
+                       
+                       
+                         
+                                 HTML reference 
+                                  
+                             
+                                   Elements 
+                                  
+                                   Global attributes 
+                                  
+                                   Attributes 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 HTML guides 
+                                  
+                             
+                                   Responsive images 
+                                  
+                                   HTML cheatsheet 
+                                  
+                                   Date &amp; time formats 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 Markup languages 
+                                  
+                             
+                                   SVG 
+                                  
+                                   MathML 
+                                  
+                                   XML 
+                                 
+                            
+                               
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       CSS 
+                     
+                     
+                       
+                         CSS: Styling language 
+                       
+                       
+                         
+                                 CSS reference 
+                                  
+                             
+                                   Properties 
+                                  
+                                   Selectors 
+                                  
+                                   At-rules 
+                                  
+                                   Values 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 CSS guides 
+                                  
+                             
+                                   Box model 
+                                  
+                                   Animations 
+                                  
+                                   Flexbox 
+                                  
+                                   Colors 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 Layout cookbook 
+                                  
+                             
+                                   Column layouts 
+                                  
+                                   Centering an element 
+                                  
+                                   Card component 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                               
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       JavaScript  JS 
+                     
+                     
+                       
+                         JavaScript: Scripting language 
+                       
+                       
+                         
+                                 JS reference 
+                                  
+                             
+                                   Standard built-in objects 
+                                  
+                                   Expressions &amp; operators 
+                                  
+                                   Statements &amp; declarations 
+                                  
+                                   Functions 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 JS guides 
+                                  
+                             
+                                   Control flow &amp; error handing 
+                                  
+                                   Loops and iteration 
+                                  
+                                   Working with objects 
+                                  
+                                   Using classes 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                               
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       Web APIs 
+                     
+                     
+                       
+                         Web APIs: Programming interfaces 
+                       
+                       
+                         
+                                 Web API reference 
+                                  
+                             
+                                   File system API 
+                                  
+                                   Fetch API 
+                                  
+                                   Geolocation API 
+                                  
+                                   HTML DOM API 
+                                  
+                                   Push API 
+                                  
+                                   Service worker API 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 Web API guides 
+                                  
+                             
+                                   Using the Web animation API 
+                                  
+                                   Using the Fetch API 
+                                  
+                                   Working with the History API 
+                                  
+                                   Using the Web speech API 
+                                  
+                                   Using web workers 
+                                 
+                            
+                               
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       All 
+                     
+                     
+                       
+                         All web technology 
+                       
+                       
+                         
+                                 Technologies 
+                                  
+                             
+                                   Accessibility 
+                                  
+                                   HTTP 
+                                  
+                                   URI 
+                                  
+                                   Web extensions 
+                                  
+                                   WebAssembly 
+                                  
+                                   WebDriver 
+                                  
+                                   See allâ¦ 
+                                 
+                            
+                                
+                                 Topics 
+                                  
+                             
+                                   Media 
+                                  
+                                   Performance 
+                                  
+                                   Privacy 
+                                  
+                                   Security 
+                                  
+                                   Progressive web apps 
+                                 
+                            
+                               
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       Learn 
+                     
+                     
+                       
+                         Learn web development 
+                       
+                       
+                         
+                                 Frontend developer course 
+                                  
+                             
+                                   Getting started modules 
+                                  
+                                   Core modules 
+                                  
+                                   MDN Curriculum 
+                                  
+                                   Check out the video course from Scrimba, our partner 
+                                 
+                            
+                                
+                                 Learn HTML 
+                                  
+                             
+                                   Structuring content with HTML module 
+                                 
+                            
+                                
+                                 Learn CSS 
+                                  
+                             
+                                   CSS styling basics module 
+                                  
+                                   CSS layout module 
+                                 
+                            
+                                
+                                 Learn JavaScript 
+                                  
+                             
+                                   Dynamic scripting with JavaScript module 
+                                 
+                            
+                               
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       Tools 
+                     
+                     
+                       
+                        Discover our tools
+                       
+                       
+                         
+                             
+                                   Playground 
+                                  
+                                   HTTP Observatory 
+                                 
+                            
+                             
+                                   Border-image generator 
+                                  
+                                   Border-radius generator 
+                                  
+                                   Box-shadow generator 
+                                  
+                                   Color format converter 
+                                  
+                                   Color mixer 
+                                  
+                                   Shape generator 
+                                 
+                           
+                       
+                     
+                   
+            
+               :host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{display:none}  
+         
+         
+      
+                     
+                       About 
+                     
+                     
+                       
+                        Get to know MDN better
+                       
+                       
+                         
+                             
+                                   About MDN 
+                                  
+                                   Advertise with us 
+                                 
+                            
+                             
+                                   Community 
+                                  
+                                   MDN on GitHub 
+                                 
+                           
+                       
+                     
+                   
+            
+             Blog 
+           
+       
+     
+           
+               .mdn-search-button{align-items:center;background-color:var(--color-background-page);border:1px solid var(--color-border-primary);border-radius:var(--radius-full);color:var(--color-text-primary);cursor:pointer;display:flex;justify-content:space-between;margin:0;padding:.25rem .25rem .25rem .75rem;width:5rem}.mdn-search-button:hover{background-color:var(--color-background-secondary)}.mdn-search-button:before{content:"";height:18px;width:15px;--csstools-light-dark-toggle-95231fd5-0:var(--csstools-color-scheme--light) var(--color-blue-80);border-bottom:2px solid var(--csstools-light-dark-toggle-95231fd5-0,var(--color-blue-50))}@supports (color:light-dark(red,red)){.mdn-search-button:before{border-bottom:2px solid light-dark(var(--color-blue-50),var(--color-blue-80))}}    
+            
+        
+           
+            
+         
+       
+        
+     
+       
+           :host{border-right:1px solid var(--color-border-primary);display:block;height:100%}mdn-button{height:100%}      .button{align-items:center;background-color:initial;border:1px solid #0000;border-radius:.25rem;color:var(--color-text-primary);column-gap:.3125em;cursor:pointer;display:inline-flex;font-family:var(--font-family-text);font-size:.875em;font-weight:450;justify-content:center;line-height:var(--font-line-ui);margin:0;padding:.5em;-webkit-text-decoration:none;text-decoration:none;vertical-align:middle}.button[data-variant=primary]{--csstools-light-dark-toggle-33eaa513-0:var(--csstools-color-scheme--light) var(--color-black);color:var(--csstools-light-dark-toggle-33eaa513-0,var(--color-white));--csstools-light-dark-toggle-33eaa513-1:var(--csstools-color-scheme--light) var(--color-white);background-color:var(--csstools-light-dark-toggle-33eaa513-1,var(--color-black))}@supports (color:light-dark(red,red)){.button[data-variant=primary]{background-color:light-dark(var(--color-black),var(--color-white));color:light-dark(var(--color-white),var(--color-black))}}.button[data-variant=primary]:hover{--csstools-light-dark-toggle-33eaa513-2:var(--csstools-color-scheme--light) var(--color-gray-60);background-color:var(--csstools-light-dark-toggle-33eaa513-2,var(--color-gray-40))}@supports (color:light-dark(red,red)){.button[data-variant=primary]:hover{background-color:light-dark(var(--color-gray-40),var(--color-gray-60))}}.button[data-variant=primary][data-action=positive]{color:var(--color-white);--csstools-light-dark-toggle-33eaa513-3:var(--csstools-color-scheme--light) var(--color-green-20);background-color:var(--csstools-light-dark-toggle-33eaa513-3,var(--color-green-50))}@supports (color:light-dark(red,red)){.button[data-variant=primary][data-action=positive]{background-color:light-dark(var(--color-green-50),var(--color-green-20))}}.button[data-variant=primary][data-action=positive]:hover{--csstools-light-dark-toggle-33eaa513-4:var(--csstools-color-scheme--light) var(--color-green-50);background-color:var(--csstools-light-dark-toggle-33eaa513-4,var(--color-green-20))}@supports (color:light-dark(red,red)){.button[data-variant=primary][data-action=positive]:hover{background-color:light-dark(var(--color-green-20),var(--color-green-50))}}.button[data-variant=primary][data-action=negative]{color:var(--color-white);--csstools-light-dark-toggle-33eaa513-5:var(--csstools-color-scheme--light) var(--color-red-20);background-color:var(--csstools-light-dark-toggle-33eaa513-5,var(--color-red-50))}@supports (color:light-dark(red,red)){.button[data-variant=primary][data-action=negative]{background-color:light-dark(var(--color-red-50),var(--color-red-20))}}.button[data-variant=primary][data-action=negative]:hover{--csstools-light-dark-toggle-33eaa513-6:var(--csstools-color-scheme--light) var(--color-red-50);background-color:var(--csstools-light-dark-toggle-33eaa513-6,var(--color-red-20))}@supports (color:light-dark(red,red)){.button[data-variant=primary][data-action=negative]:hover{background-color:light-dark(var(--color-red-20),var(--color-red-50))}}.button[data-variant=secondary]{border-color:currentcolor}.button[data-variant=secondary]:hover{--csstools-light-dark-toggle-33eaa513-7:var(--csstools-color-scheme--light) var(--color-gray-40);background-color:var(--csstools-light-dark-toggle-33eaa513-7,var(--color-gray-80))}@supports (color:light-dark(red,red)){.button[data-variant=secondary]:hover{background-color:light-dark(var(--color-gray-80),var(--color-gray-40))}}.button[data-variant=secondary][data-action=positive]{--csstools-light-dark-toggle-33eaa513-8:var(--csstools-color-scheme--light) var(--color-green-80);color:var(--csstools-light-d

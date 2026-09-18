@@ -1,0 +1,61 @@
+# Konoros-Sec small: ~30M params, GQA (8q/2kv), context 1024. Colab T4/A100.
+model:
+  vocab_size: 320
+  d_model: 512
+  n_layers: 8
+  n_heads: 8
+  n_kv_heads: 2
+  context_length: 1024
+  dropout: 0.0
+  rope_theta: 10000.0
+  tie_weights: true
+  norm: rmsnorm
+  mlp: swiglu
+  bos_id: 258
+  eos_id: 259
+  pad_id: 256
+  unk_id: 257
+
+training:
+  batch_size: 8
+  grad_accum_steps: 4   # effective batch 32 x 1024 ctx
+  grad_checkpoint: true # fit T4 15GB
+  lr: 3e-4
+  weight_decay: 0.1
+  betas: [0.9, 0.95]
+  grad_clip: 1.0
+  max_steps: 20000
+  warmup_steps: 500
+  eval_interval: 1000
+  save_interval: 2000
+  device: cuda
+  dtype: bfloat16
+  seed: 42
+
+data:
+  train_path: data/processed/train.bin
+  val_path: data/processed/val.bin
+
+tokenizer:
+  type: byte
+  path: data/tokenizer/byte.json
+
+checkpoint:
+  dir: experiments/small/checkpoints
+  log_dir: experiments/small/logs
+
+reasoning:
+  enabled: false
+  think_bos: "<think>"
+  think_eos: "</think>"
+  answer_bos: "<answer>"
+  answer_eos: "</answer>"
+  max_think_tokens: 512
+
+sft:
+  enabled: false
+  base_ckpt: ""
+  data_path: "data/sft/security_sft.jsonl"
+  max_steps: 1000
+  lr: 1e-5
+  mask_prompt: true
