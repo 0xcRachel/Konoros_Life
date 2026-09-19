@@ -52,7 +52,7 @@ def main(inputs: list[str], out: str):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    p.add_argument("--inputs", default="data_prime/raw/so_elite.jsonl,data_prime/raw/wiki_en.jsonl,data_prime/raw/wiki_vi.jsonl")
+    p.add_argument("--inputs", default="data_prime/raw/so_elite.jsonl,data_prime/raw/so_dump_elite.jsonl,data_prime/raw/wiki_en.jsonl,data_prime/raw/wiki_vi.jsonl,data/raw/so_all.jsonl,data/raw/so_python.jsonl,data/raw/so_security.jsonl")
     p.add_argument("--out", default="data/raw/prime_all.jsonl")
     a = p.parse_args()
     main([s.strip() for s in a.inputs.split(",") if s.strip()], a.out)

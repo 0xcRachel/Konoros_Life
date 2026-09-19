@@ -60,13 +60,13 @@ def main(inp, train_out, val_out, tok_out, val_ratio=0.05, add_eos=True, repeat=
     np.array(val_ids, dtype=np.uint16).tofile(val_out)
     print(f"train {len(train_ids)} -> {train_out} | val {len(val_ids)} -> {val_out}")
     # token budget: ước lượng số steps/epoch cho Colab
-    for name, bs, ctx in [("tiny/bs32x512", 32, 512), ("small/eff32x1024", 32, 1024)]:
+    for name, bs, ctx in [("tiny/bs64x512", 64, 512), ("small/eff64x1024", 64, 1024)]:
         print(f"[budget] {name}: {len(train_ids) // (bs * ctx)} steps/epoch")
 
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    p.add_argument("--input", default="data/raw/train.txt")
+    p.add_argument("--input", default="data/raw/prime_all.jsonl")
     p.add_argument("--train-out", default="data/processed/train.bin")
     p.add_argument("--val-out", default="data/processed/val.bin")
     p.add_argument("--tok-out", default="data/tokenizer/byte.json")

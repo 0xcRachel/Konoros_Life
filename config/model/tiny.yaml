@@ -19,7 +19,9 @@ training:
   batch_size: 64
   grad_accum_steps: 1
   grad_checkpoint: false
-  epochs: 3
+  # TẠM epochs=1 vì prime_all còn <2MB (3 epochs -> học vẹt, loss ~0.006).
+  # Khi prime_all >10MB (có Wiki) thì nâng lên 3.
+  epochs: 1
   lr: 3e-4
   weight_decay: 0.1
   betas: [0.9, 0.95]

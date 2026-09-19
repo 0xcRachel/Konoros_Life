@@ -15,7 +15,8 @@ Defensive, authorized security assistant. Không exploit / persistence / credent
 - `data_prime/stackoverflow_elite/dump_prime.py` — GĐ2 Colab: stream Posts.xml.7z, không bung full
 - `data_prime/wiki_elite/hf_stream.py` — stream HF wikipedia en+vi, lọc bài dài + bỏ stub (cần `pip install datasets`, chạy Colab)
 - `data_prime/common/` — clean_text (unicode/boilerplate), dedup MinHash 0.85, license+manifest
-- `data_prime/build/merge_prime.py` — gộp → `data/raw/prime_all.jsonl` (hiện 280 bản ghi / 0.9MB sau dedup; elite 154 + batch cũ)
+- `data_prime/build/merge_prime.py` — gộp mọi nguồn (elite + batch cũ) → `data/raw/prime_all.jsonl` (hiện 280 bản ghi / 0.9MB / ~543K token sau dedup; elite 154 + batch cũ 126)
+- `scripts/prepare_data.py` mặc định `--input data/raw/prime_all.jsonl` (packing EOS, zero-pad, in budget steps/epoch)
 - Ngưỡng lọc trong `data_prime/configs/elite_filters.yaml`
 - Colab 83GB RAM: gắn `SE_API_KEY` (stackapps, miễn phí) → `api_prime --max 2000` + `hf_stream` + dump GĐ2 (lệnh trong notebook cell 1 + cuối)
 

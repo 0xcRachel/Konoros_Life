@@ -61,7 +61,7 @@ def main(config_path: str, resume: str | None = None):
     if use_ckpt:
         model.gradient_checkpointing_enable()
         print("gradient checkpointing: ON")
-    print(f"grad_accum_steps={grad_accum} (~{batch_size * grad_accum} toks-batch effective x{mcfg.context_length})")
+    print(f"grad_accum_steps={grad_accum} (eff_seq_batch={batch_size * grad_accum} x ctx {mcfg.context_length})")
     print(f"params={count_params(model):,}")
     opt = build_optimizer(model, lr=base_lr,
                           weight_decay=float(tcfg.get("weight_decay", 0.1)),
