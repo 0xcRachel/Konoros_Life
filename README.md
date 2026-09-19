@@ -7,6 +7,7 @@ Defensive, authorized security assistant. Không exploit / persistence / credent
 - **GQA**: `n_kv_heads` (tiny MHA 4/4, small GQA 8q/2kv) — `config/model/small.yaml`
 - **KV-cache generate**: prefill 1 lần, decode 1 token/step, sliding-window re-prefill khi đầy context
 - **Train**: AMP bf16, cosine+warmup, grad accumulation, gradient checkpointing, resume, kill-switch
+- **Epochs**: `training.epochs>0` thì `max_steps = epochs * steps_per_epoch` (tiny 3 epochs/batch 64, small 2 epochs/eff-batch 64)
 - Vocab 320 byte-level + special `<think>/<answer>/<user>/...` (reasoning-ready từ v0.1)
 
 ## Dữ liệu tinh hoa (data_prime/) — đã fetch GĐ1
@@ -14,8 +15,9 @@ Defensive, authorized security assistant. Không exploit / persistence / credent
 - `data_prime/stackoverflow_elite/dump_prime.py` — GĐ2 Colab: stream Posts.xml.7z, không bung full
 - `data_prime/wiki_elite/hf_stream.py` — stream HF wikipedia en+vi, lọc bài dài + bỏ stub (cần `pip install datasets`, chạy Colab)
 - `data_prime/common/` — clean_text (unicode/boilerplate), dedup MinHash 0.85, license+manifest
-- `data_prime/build/merge_prime.py` — gộp → `data/raw/prime_all.jsonl` (hiện 215 bản ghi / 0.8MB sau dedup)
+- `data_prime/build/merge_prime.py` — gộp → `data/raw/prime_all.jsonl` (hiện 280 bản ghi / 0.9MB sau dedup; elite 154 + batch cũ)
 - Ngưỡng lọc trong `data_prime/configs/elite_filters.yaml`
+- Colab 83GB RAM: gắn `SE_API_KEY` (stackapps, miễn phí) → `api_prime --max 2000` + `hf_stream` + dump GĐ2 (lệnh trong notebook cell 1 + cuối)
 
 ## Tối ưu token in/out
 - **Input (packing):** `prepare_data.py` encode từng doc + EOS phân cách, nối liền zero-padding; in `[budget]` steps/epoch cho tiny/small

@@ -78,6 +78,13 @@ def main(config_path: str, resume: str | None = None):
         dcfg["train_path"], dcfg["val_path"], mcfg.context_length, batch_size, seed)
     train_iter = itertools.cycle(train_loader)
 
+    # Epochs mode: epochs>0 thì max_steps = epochs * steps_per_epoch (ghi đè max_steps yaml).
+    epochs = float(tcfg.get("epochs", 0))
+    steps_per_epoch = len(train_loader)
+    if epochs and epochs > 0:
+        max_steps = int(epochs * steps_per_epoch)
+        print(f"epochs={epochs} steps_per_epoch={steps_per_epoch} -> max_steps={max_steps}")
+
     ckpt_dir = ccfg.get("dir", "experiments/v0.1/checkpoints")
     log_dir = ccfg.get("log_dir", "experiments/v0.1/logs")
     os.makedirs(ckpt_dir, exist_ok=True)
