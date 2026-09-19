@@ -59,3 +59,20 @@ sft:
   max_steps: 1000
   lr: 1e-5
   mask_prompt: true
+
+grpo:
+  enabled: false
+  data_path: "data/sft/security_reasoning.jsonl"
+  steps: 500
+  group: 4
+  lr: 1e-6
+  beta: 0.02
+  eps: 0.2
+  max_new_tokens: 128
+
+dpo:
+  enabled: false
+  data_path: "data/sft/security_prefs.jsonl"
+  steps: 500
+  lr: 5e-6
+  beta: 0.1

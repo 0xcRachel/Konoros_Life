@@ -11,9 +11,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tokenizer import ByteTokenizer
 
 
-def load_texts(path: str) -> str:
+def load_texts(path: str) -> list[str]:
+    """Return list of DOCS (packing: mỗi doc encode riêng + EOS, nối liền, zero padding)."""
     if path.endswith(".jsonl"):
-        parts = []
+        docs = []
         with open(path, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
@@ -21,16 +22,16 @@ def load_texts(path: str) -> str:
                     continue
                 obj = json.loads(line)
                 if "text" in obj:
-                    parts.append(obj["text"])
+                    docs.append(obj["text"])
                 else:
-                    parts.append(
+                    docs.append(
                         f"<user>{obj.get('prompt','')}</user>"
                         f"<think>{obj.get('think','')}</think>"
                         f"<answer>{obj.get('answer', obj.get('completion',''))}</answer>"
                     )
-        return "\n".join(parts) + "\n"
+        return docs
     with open(path, encoding="utf-8") as f:
-        return f.read()
+        return [f.read()]
 
 
 def main(inp, train_out, val_out, tok_out, val_ratio=0.05, add_eos=True, repeat=200):
@@ -42,11 +43,14 @@ def main(inp, train_out, val_out, tok_out, val_ratio=0.05, add_eos=True, repeat=
     if tok_out:
         tok.save(tok_out)
     ids: list[int] = []
+    n_docs = 0
     for one in [s.strip() for s in inp.split(",") if s.strip()]:
-        text = load_texts(one)
-        part = tok.encode(text, add_eos=add_eos)
-        print(f"[prepare] {one}: {len(part)} tokens")
-        ids.extend(part)
+        for doc in load_texts(one):
+            part = tok.encode(doc, add_eos=add_eos)  # EOS phân cách doc (packing, không padding)
+            if part:
+                ids.extend(part)
+                n_docs += 1
+    print(f"[prepare] {n_docs} docs packed: {len(ids)} tokens")
     if len(ids) < 4096:
         print(f"[prepare] only {len(ids)} tokens, repeating x{repeat} for smoke training")
         ids = (ids * repeat)[: 20000]
@@ -55,6 +59,9 @@ def main(inp, train_out, val_out, tok_out, val_ratio=0.05, add_eos=True, repeat=
     np.array(train_ids, dtype=np.uint16).tofile(train_out)
     np.array(val_ids, dtype=np.uint16).tofile(val_out)
     print(f"train {len(train_ids)} -> {train_out} | val {len(val_ids)} -> {val_out}")
+    # token budget: ước lượng số steps/epoch cho Colab
+    for name, bs, ctx in [("tiny/bs32x512", 32, 512), ("small/eff32x1024", 32, 1024)]:
+        print(f"[budget] {name}: {len(train_ids) // (bs * ctx)} steps/epoch")
 
 
 if __name__ == "__main__":

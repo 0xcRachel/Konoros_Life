@@ -1,0 +1,19 @@
+# "Tinh hoa" elite thresholds — chỉnh số mà không cần sửa code.
+stackoverflow:
+  min_q_score: 5
+  min_a_score: 3
+  require_accepted: true
+  min_code_lines: 3
+  min_chars: 200
+  max_chars: 6000
+
+wikipedia:
+  en_mode: "longform"   # longform: len>2000 chars + has references section; featured list optional
+  en_min_chars: 2000
+  vi_min_chars: 800
+  drop_sections: ["References", "See also", "External links", "Notes", "Chú thích", "Tham khảo", "Xem thêm", "Liên kết ngoài"]
+
+common:
+  dedup_minhash_threshold: 0.85
+  max_repeat_line_ratio: 0.3
+  langs: ["en", "vi"]

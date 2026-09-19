@@ -1,0 +1,20 @@
+# Nguồn fetch GĐ1 (chạy được cả máy thường + Colab).
+se_api:
+  tags: ["python", "javascript", "linux", "security", "networking"]
+  pages_per_tag: 3
+  pagesize: 30
+  key_env: "SE_API_KEY"   # key miễn phí stackapps.com -> 10k req/ngày; không key ~300/ngày
+  out: "data_prime/raw/so_elite.jsonl"
+
+hf_wiki:
+  dataset: "wikipedia"
+  config_en: "20230301.en"
+  config_vi: "20230301.vi"
+  max_en: 8000
+  max_vi: 4000
+  out_en: "data_prime/raw/wiki_en.jsonl"
+  out_vi: "data_prime/raw/wiki_vi.jsonl"
+
+merge:
+  inputs: ["data_prime/raw/so_elite.jsonl", "data_prime/raw/wiki_en.jsonl", "data_prime/raw/wiki_vi.jsonl"]
+  out: "data/raw/prime_all.jsonl"

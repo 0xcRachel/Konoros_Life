@@ -8,6 +8,7 @@ pytest>=7.4.0
 requests>=2.31.0
 datasets>=2.16.0
 huggingface-hub>=0.20.0
+# Colab GĐ2 dump-full: py7zr>=0.20.0, lxml>=4.9.0
 black>=23.0.0
 isort>=5.12.0
 ruff>=0.1.0

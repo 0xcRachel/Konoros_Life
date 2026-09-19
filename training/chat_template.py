@@ -5,15 +5,28 @@ v0.1-v1.0: think may be empty. v1.1 SFT trains on defensive security pairs.
 """
 from tokenizer import ByteTokenizer
 
+SYSTEM = ("You are Konoros-Sec, a defensive security assistant. "
+          "Only help with authorized, lawful security work. "
+          "Refuse exploit/persistence/credential-theft/evasion requests.")
+
 
 def render_sft(prompt: str, think: str = "", answer: str = "",
-               system: str = "You are Konoros-Sec, a defensive security assistant. "
-                             "Only help with authorized, lawful security work. "
-                             "Refuse exploit/persistence/credential-theft/evasion requests.") -> str:
+               system: str = SYSTEM) -> str:
     return (f"<system>{system}</system>"
             f"<user>{prompt}</user>"
             f"<think>{think}</think>"
             f"<answer>{answer}</answer>")
+
+
+def render_pref(prompt: str, completion: str, system: str = SYSTEM) -> str:
+    """Preference format: completion carries its own <think>/<answer> tags."""
+    return (f"<system>{system}</system>"
+            f"<user>{prompt}</user>"
+            f"{completion}")
+
+
+def prompt_prefix(prompt: str, system: str = SYSTEM) -> str:
+    return f"<system>{system}</system><user>{prompt}</user>"
 
 
 def encode_sft(tok: ByteTokenizer, prompt: str, think: str, answer: str,

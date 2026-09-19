@@ -9,18 +9,44 @@ Defensive, authorized security assistant. Không exploit / persistence / credent
 - **Train**: AMP bf16, cosine+warmup, grad accumulation, gradient checkpointing, resume, kill-switch
 - Vocab 320 byte-level + special `<think>/<answer>/<user>/...` (reasoning-ready từ v0.1)
 
-## Dữ liệu có sẵn (đã fetch, CC-BY-SA + public docs)
+## Dữ liệu tinh hoa (data_prime/) — đã fetch GĐ1
+- `data_prime/stackoverflow_elite/api_prime.py` — SE API, chỉ accepted + q_score>=5 + a_score>=3 + code>=3 dòng (đã lấy 32 bản ghi elite)
+- `data_prime/stackoverflow_elite/dump_prime.py` — GĐ2 Colab: stream Posts.xml.7z, không bung full
+- `data_prime/wiki_elite/hf_stream.py` — stream HF wikipedia en+vi, lọc bài dài + bỏ stub (cần `pip install datasets`, chạy Colab)
+- `data_prime/common/` — clean_text (unicode/boilerplate), dedup MinHash 0.85, license+manifest
+- `data_prime/build/merge_prime.py` — gộp → `data/raw/prime_all.jsonl` (hiện 215 bản ghi / 0.8MB sau dedup)
+- Ngưỡng lọc trong `data_prime/configs/elite_filters.yaml`
+
+## Tối ưu token in/out
+- **Input (packing):** `prepare_data.py` encode từng doc + EOS phân cách, nối liền zero-padding; in `[budget]` steps/epoch cho tiny/small
+- **Output (phân nhánh):** KV-cache decode + sliding-window re-prefill; `generate --best-of N` sample N nhánh, chấm format/ít lặp/đủ dài, trả nhánh tốt nhất
+
+## Dữ liệu batch cũ (giữ lại)
 - `data/raw/so_all.jsonl` — **208 Q&A** (python 90, javascript 40, linux 20, security 39, networking 19) via Stack Exchange API
 - `data/raw/so_python.jsonl`, `so_security.jsonl` — batch đầu
 - `data/raw/web_docs.txt` — Python tutorial + secrets/hashlib + MDN Web Security (allowlist + robots.txt)
 - Lấy thêm: `python data_collectors/stackoverflow/fetch_all.py --out data/raw/so_all.jsonl --max-answers 500` (quota ẩn danh ~300 req/ngày/IP, reset hàng ngày; key miễn phí tại stackapps.com cho 10k/ngày)
+
+## Học tăng cường preference (DPO, v1.2)
+- `training/dpo.py` — Direct Preference Optimization: loss `-log sigmoid(beta * margin)`, ref model frozen, mask prompt, không cần reward model
+- Data: `data/sft/security_prefs.jsonl` (8 cặp chosen/rejected: benign giúp > từ chối/khuyên bậy, harmful từ chối > tuân thủ)
+- Eval: `python -m security.eval.pref_eval --ckpt <dpo.pt>` (preference accuracy)
+- Colab: SFT → `training.dpo --steps 40` → GRPO (base từ `experiments/v1.2/dpo.pt`)
+
+## RL suy nghĩ nhiều bước (GRPO, v1.3)
+- `training/rewards.py` — R = 0.4 format (`<think>/<answer>`) + 0.5 safety (benign giúp / harmful từ chối) + 0.1 think_shape
+- `training/rollout.py` — sample G completions/prompt + parse think/answer
+- `training/grpo.py` — Group Relative Policy Optimization: advantage chuẩn hoá theo nhóm, clipped ratio, KL penalty về ref model, không cần value network
+- Data: `data/sft/security_reasoning.jsonl` (8 mẫu think traces defensive)
+- Eval: `python -m security.eval.reasoning_eval --ckpt <grpo.pt>`
+- Colab: SFT warmup `security_reasoning.jsonl` → `training.grpo --steps 50 --G 4` → reasoning_eval
 
 ## Chạy trên Colab (KHÔNG train máy local)
 Mở `notebooks/konoros_sec_v11_colab.ipynb` và chạy từng cell:
 ```bash
 pip install -r requirements.txt
 python -m pytest test/ -q
-python scripts/prepare_data.py --input data/raw/so_all.jsonl,data/raw/web_docs.txt,data/raw/train.txt --train-out data/processed/train.bin --val-out data/processed/val.bin
+python scripts/prepare_data.py --input data/raw/prime_all.jsonl,data/raw/train.txt --train-out data/processed/train.bin --val-out data/processed/val.bin
 python -m training.train --config config/model/tiny.yaml     # smoke test
 python -m training.train --config config/model/small.yaml    # scale up khi tiny loss giảm
 python -m evaluation.evaluate --config config/model/tiny.yaml --ckpt <ckpt>.pt
