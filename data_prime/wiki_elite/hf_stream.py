@@ -2,8 +2,9 @@
 
 Chạy: pip install datasets
   python data_prime/wiki_elite/hf_stream.py --out-en data_prime/raw/wiki_en.jsonl --max-en 8000
-EN: giữ bài dài + có References (proxy featured/good, rẻ hơn parse category).
-VI: giữ bài dài + có section (bỏ stub bot).
+Dùng dataset parquet chính thức `wikimedia/wikipedia` (bản script `wikipedia` cũ
+đã bị HF khai tử -> RuntimeError). EN: giữ bài dài + có References
+(proxy featured/good, rẻ hơn parse category). VI: giữ bài dài (bỏ stub bot).
 """
 import argparse
 import os
@@ -39,13 +40,13 @@ def clean_wiki(text: str) -> str:
     return clean_text(text)
 
 
-def stream_cfg(cfg: str, max_n: int, min_chars: int, out: str, lang: str):
+def stream_cfg(dataset: str, cfg: str, max_n: int, min_chars: int, out: str, lang: str):
     from datasets import load_dataset  # pip install datasets
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     seen = load_seen_links(out)
     dup = NearDupFilter()
     added = 0
-    ds = load_dataset("wikipedia", cfg, split="train", streaming=True, trust_remote_code=False)
+    ds = load_dataset(dataset, cfg, split="train", streaming=True, trust_remote_code=False)
     with open(out, "a", encoding="utf-8") as f:
         for row in ds:
             if added >= max_n:
@@ -68,16 +69,20 @@ def stream_cfg(cfg: str, max_n: int, min_chars: int, out: str, lang: str):
     print(f"[{lang}] added {added} -> {out} (total {len(seen)})")
 
 
-def main(out_en, max_en, out_vi, max_vi):
-    stream_cfg("20230301.en", max_en, _CFG["en_min_chars"], out_en, "en")
-    stream_cfg("20230301.vi", max_vi, _CFG["vi_min_chars"], out_vi, "vi")
+def main(dataset: str, cfg_en: str, out_en: str, max_en: int,
+         cfg_vi: str, out_vi: str, max_vi: int):
+    stream_cfg(dataset, cfg_en, max_en, _CFG["en_min_chars"], out_en, "en")
+    stream_cfg(dataset, cfg_vi, max_vi, _CFG["vi_min_chars"], out_vi, "vi")
 
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
+    p.add_argument("--dataset", default="wikimedia/wikipedia")
+    p.add_argument("--cfg-en", default="20231101.en")
     p.add_argument("--out-en", default="data_prime/raw/wiki_en.jsonl")
     p.add_argument("--max-en", type=int, default=8000)
+    p.add_argument("--cfg-vi", default="20231101.vi")
     p.add_argument("--out-vi", default="data_prime/raw/wiki_vi.jsonl")
     p.add_argument("--max-vi", type=int, default=4000)
     a = p.parse_args()
-    main(a.out_en, a.max_en, a.out_vi, a.max_vi)
+    main(a.dataset, a.cfg_en, a.out_en, a.max_en, a.cfg_vi, a.out_vi, a.max_vi)

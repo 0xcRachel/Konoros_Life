@@ -70,3 +70,28 @@ def resolve_ckpt(path: str) -> str:
     best = cands[-1]
     print(f"[ckpt] '{path}' not found -> fallback newest: {best}")
     return best
+
+
+def check_vocab(tok, mcfg, bin_path: str | None = None):
+    """Fail-fast khi tokenizer/bins lệch vocab model (tránh CUDA gather out-of-bounds).
+
+    - tok.vocab_size phải == mcfg.vocab_size (BPE train ra bao nhiêu thì set yaml bấy nhiêu).
+    - max id trong .bin phải < vocab_size.
+    """
+    if tok.vocab_size != mcfg.vocab_size:
+        raise SystemExit(
+            f"[FATAL] tokenizer vocab {tok.vocab_size} != model vocab {mcfg.vocab_size}.\n"
+            f"  Byte (320) đi với yaml vocab 320 (tiny/small). "
+            f"BPE thì lấy số vocab thực tế từ train_bpe (vd 11381) rồi set yaml vocab_size + tokenizer.type=bpe.\n"
+            f"  Rebuild .bin đúng tokenizer rồi train lại."
+        )
+    if bin_path and os.path.exists(bin_path):
+        import numpy as np
+        arr = np.memmap(bin_path, dtype=np.uint16, mode="r")
+        mx = int(arr.max()) if len(arr) else -1
+        print(f"[data] {bin_path}: tokens={len(arr)} max_id={mx} vocab={mcfg.vocab_size}")
+        if mx >= mcfg.vocab_size:
+            raise SystemExit(
+                f"[FATAL] .bin max id {mx} >= vocab {mcfg.vocab_size}: "
+                f"bins build bằng tokenizer khác model. Rebuild .bin (prepare_data) đúng tokenizer rồi train lại."
+            )

@@ -7,9 +7,9 @@ se_api:
   out: "data_prime/raw/so_elite.jsonl"
 
 hf_wiki:
-  dataset: "wikipedia"
-  config_en: "20230301.en"
-  config_vi: "20230301.vi"
+  dataset: "wikimedia/wikipedia"
+  config_en: "20231101.en"
+  config_vi: "20231101.vi"
   max_en: 8000
   max_vi: 4000
   out_en: "data_prime/raw/wiki_en.jsonl"

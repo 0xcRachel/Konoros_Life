@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 from model import ModelConfig, MyAI
 from tokenizer import ByteTokenizer, load_tokenizer
-from training.checkpoint import save_checkpoint, load_checkpoint
+from training.checkpoint import save_checkpoint, load_checkpoint, check_vocab
 from training.optimizer import build_optimizer
 from training.rollout import rollout_group, score_group, build_prefix
 
@@ -88,6 +88,7 @@ def main(config_path: str, data_path: str, base_ckpt: str | None, out: str,
     device = "cuda" if torch.cuda.is_available() else "cpu"
     _tok_cfg = full.get("tokenizer", {})
     tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
+    check_vocab(tok, mcfg)
     policy = MyAI(mcfg).to(device)
     if base_ckpt and os.path.exists(base_ckpt):
         load_checkpoint(base_ckpt, policy, map_location=device)

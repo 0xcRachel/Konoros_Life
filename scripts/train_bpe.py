@@ -58,6 +58,8 @@ def main(inp: str, out: str, vocab: int):
     os.remove(tmp)
     meta = BPETokenizer(out)
     print(f"BPE vocab={meta.vocab_size} -> {out}")
+    print(f"LƯU Ý: set yaml vocab_size={meta.vocab_size} + tokenizer.type=bpe (medium/large), "
+          f"nếu không train.py sẽ dừng với [FATAL] thay vì crash CUDA.")
     print("sample:", meta.encode("def hello(): print('hi')")[:12])
 
 

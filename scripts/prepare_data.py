@@ -67,9 +67,10 @@ def main(inp, train_out, val_out, tok_out, tok_type="byte", val_ratio=0.05, add_
     np.array(train_ids, dtype=np.uint16).tofile(train_out)
     np.array(val_ids, dtype=np.uint16).tofile(val_out)
     print(f"train {len(train_ids)} -> {train_out} | val {len(val_ids)} -> {val_out}")
-    # token budget: ước lượng số steps/epoch cho Colab
-    for name, bs, ctx in [("tiny/bs64x512", 64, 512), ("small/eff64x1024", 64, 1024)]:
-        print(f"[budget] {name}: {len(train_ids) // (bs * ctx)} steps/epoch")
+    # token budget: PackedDataset dùng sliding-window stride-1
+    # -> steps/epoch = n_tokens // batch (KHÔNG chia thêm ctx).
+    for name, bs in [("tiny/bs64", 64), ("small/eff64", 64), ("medium/eff64", 64), ("large/eff64", 64)]:
+        print(f"[budget] {name}: {len(train_ids) // bs} steps/epoch")
 
 
 if __name__ == "__main__":

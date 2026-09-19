@@ -11,7 +11,7 @@ from tokenizer import ByteTokenizer, load_tokenizer
 from .dataset import get_loaders
 from .loss import lm_loss
 from .optimizer import build_optimizer, cosine_schedule, set_lr
-from .checkpoint import save_checkpoint, load_checkpoint, check_tokenizer_compat
+from .checkpoint import save_checkpoint, load_checkpoint, check_tokenizer_compat, check_vocab
 
 
 def load_full_config(path: str) -> dict:
@@ -58,6 +58,7 @@ def main(config_path: str, resume: str | None = None):
 
     _tok_cfg = full.get("tokenizer", {})
     tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
+    check_vocab(tok, mcfg, dcfg.get("train_path"))  # fail-fast trước khi tốn GPU
     model = MyAI(mcfg).to(device)
     if use_ckpt:
         model.gradient_checkpointing_enable()

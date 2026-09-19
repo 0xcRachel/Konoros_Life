@@ -74,7 +74,7 @@ def main(config_path: str, data_path: str, base_ckpt: str | None, out: str,
     import yaml
     import torch
     from model import ModelConfig, MyAI
-    from training.checkpoint import save_checkpoint, load_checkpoint
+    from training.checkpoint import save_checkpoint, load_checkpoint, check_vocab
     from training.optimizer import build_optimizer
     with open(config_path, encoding="utf-8") as f:
         full = yaml.safe_load(f)
@@ -89,6 +89,7 @@ def main(config_path: str, data_path: str, base_ckpt: str | None, out: str,
     from tokenizer import load_tokenizer as _lt
     _tok_cfg = full.get("tokenizer", {})
     tok = _lt(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
+    check_vocab(tok, mcfg)
     policy = MyAI(mcfg).to(device)
     if base_ckpt and os.path.exists(base_ckpt):
         load_checkpoint(base_ckpt, policy, map_location=device)

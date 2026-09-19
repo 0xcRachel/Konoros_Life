@@ -7,7 +7,7 @@ import torch
 
 from model import ModelConfig, MyAI
 from tokenizer import ByteTokenizer, load_tokenizer
-from training.checkpoint import save_checkpoint, load_checkpoint
+from training.checkpoint import save_checkpoint, load_checkpoint, check_vocab
 from training.chat_template import encode_sft
 from training.optimizer import build_optimizer
 
@@ -37,6 +37,7 @@ def main(config_path: str, data_path: str, base_ckpt: str | None,
     device = "cuda" if torch.cuda.is_available() else "cpu"
     _tok_cfg = full.get("tokenizer", {})
     tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
+    check_vocab(tok, mcfg)
     model = MyAI(mcfg).to(device)
     if base_ckpt and os.path.exists(base_ckpt):
         load_checkpoint(base_ckpt, model, map_location=device)
