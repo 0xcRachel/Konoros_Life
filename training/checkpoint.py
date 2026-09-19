@@ -1,7 +1,7 @@
-"""Checkpoint save/load with tokenizer-hash guard."""
+"""Checkpoint save/load with tokenizer-hash guard (torch import lazy để tooling nhẹ dùng được)."""
+import glob
 import hashlib
 import os
-import torch
 
 
 def _tok_hash(vocab_size: int, bos: int, eos: int, pad: int) -> str:
@@ -11,6 +11,7 @@ def _tok_hash(vocab_size: int, bos: int, eos: int, pad: int) -> str:
 def save_checkpoint(path: str, model, optimizer=None, scheduler_state=None,
                     step: int = 0, config: dict | None = None,
                     tokenizer_meta: dict | None = None):
+    import torch
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     payload = {
         "step": step,
@@ -26,6 +27,7 @@ def save_checkpoint(path: str, model, optimizer=None, scheduler_state=None,
 
 
 def load_checkpoint(path: str, model, optimizer=None, map_location="cpu", strict: bool = True):
+    import torch
     ckpt = torch.load(path, map_location=map_location, weights_only=False)
     model.load_state_dict(ckpt["model"], strict=strict)
     if optimizer is not None and "optimizer" in ckpt:
@@ -46,3 +48,25 @@ def check_tokenizer_compat(tokenizer_meta: dict, tok) -> bool:
               "Embedding shape may fail — rebuild tokenizer or retrain head.")
         return False
     return True
+
+
+def resolve_ckpt(path: str) -> str:
+    """Trả về path nếu tồn tại; nếu không, fallback checkpoint mới nhất dưới experiments/.
+
+    Không bao giờ crash FileNotFoundError câm — luôn in rõ đang dùng file nào.
+    """
+    if path and os.path.exists(path):
+        return path
+    cands = sorted(
+        glob.glob("experiments/**/step_*.pt", recursive=True)
+        + glob.glob("experiments/**/last.pt", recursive=True),
+        key=os.path.getmtime,
+    )
+    if not cands:
+        raise FileNotFoundError(
+            f"checkpoint '{path}' not found and no fallback under experiments/. "
+            "Train trước (training.train) hoặc kiểm tra lại đường dẫn."
+        )
+    best = cands[-1]
+    print(f"[ckpt] '{path}' not found -> fallback newest: {best}")
+    return best

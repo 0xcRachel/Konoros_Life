@@ -6,7 +6,7 @@ import torch
 
 from model import ModelConfig, MyAI
 from tokenizer import ByteTokenizer
-from training.checkpoint import load_checkpoint
+from training.checkpoint import load_checkpoint, resolve_ckpt
 from chat.session import build_history, add_turn, render_history, parse_reply
 
 
@@ -15,6 +15,7 @@ def main(ckpt, config, max_new, temperature, top_p, show_think):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MyAI(mcfg).to(device).eval()
     if ckpt:
+        ckpt = resolve_ckpt(ckpt)
         load_checkpoint(ckpt, model, map_location=device)
         print(f"loaded {ckpt} [{device}]")
     tok = ByteTokenizer()

@@ -6,7 +6,7 @@ import torch
 
 from model import ModelConfig, MyAI
 from tokenizer import ByteTokenizer
-from training.checkpoint import load_checkpoint, check_tokenizer_compat
+from training.checkpoint import load_checkpoint, check_tokenizer_compat, resolve_ckpt
 from training.rewards import parse_reasoning
 
 
@@ -27,6 +27,7 @@ def main(ckpt_path, prompt, max_new_tokens, temperature, top_k, top_p, config_pa
     mcfg = ModelConfig.from_yaml(config_path)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MyAI(mcfg).to(device)
+    ckpt_path = resolve_ckpt(ckpt_path)
     ckpt = load_checkpoint(ckpt_path, model, map_location=device)
     tok = ByteTokenizer()
     check_tokenizer_compat(ckpt.get("tokenizer_meta", {}), tok)
