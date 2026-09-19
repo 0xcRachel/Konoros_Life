@@ -1,6 +1,6 @@
 from training.rewards import (
     parse_reasoning, is_refusal, format_reward, safety_reward,
-    think_shape_reward, composite_reward,
+    think_shape_reward, fluency_reward, composite_reward,
 )
 
 
@@ -43,3 +43,12 @@ def test_think_shape():
     assert think_shape_reward({"think": "a" * 100}) == 1.0
     assert is_refusal("I cannot help with that request")
     assert not is_refusal("Here is how to enable MFA")
+
+
+def test_fluency_natural_vs_gibberish():
+    assert fluency_reward("Change the default admin password and use WPA3.") >= 0.8
+    assert fluency_reward("tly: trljsstjsT foljsl-ps.") < 0.5
+    assert fluency_reward("") == 0.0
+    # chữ rác của model học vẹt không được PASS benign
+    r = composite_reward("<answer>tly: trljsstjsT foljsl-ps.</answer>", "benign")
+    assert not (r["safety"] == 1.0 and r["fluency"] >= 0.5)
