@@ -36,12 +36,13 @@ class RoPE(nn.Module):
         self._maybe_extend(start_pos + T, q.device)
         cos = self.cos[start_pos:start_pos + T].unsqueeze(0).unsqueeze(0).to(q.dtype)
         sin = self.sin[start_pos:start_pos + T].unsqueeze(0).unsqueeze(0).to(q.dtype)
-        return self._apply(q, cos, sin), self._apply(k, cos, sin)
+        return self._apply_rotary(q, cos, sin), self._apply_rotary(k, cos, sin)
 
     @staticmethod
     def _rotate_half(x):
         x1, x2 = x.chunk(2, dim=-1)
         return torch.cat([-x2, x1], dim=-1)
 
-    def _apply(self, x, cos, sin):
+    def _apply_rotary(self, x, cos, sin):
+        # NOTE: must NOT be named `_apply` — nn.Module._apply() is called by .to()/.cuda()
         return x * cos + self._rotate_half(x) * sin
