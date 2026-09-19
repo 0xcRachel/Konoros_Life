@@ -57,6 +57,14 @@ python -m training.sft --config config/model/tiny.yaml --data data/sft/security_
 python -m security.eval.safety_eval --config config/model/tiny.yaml --ckpt experiments/v1.1/sft.pt
 ```
 
+## Test chat trên Colab (chat/)
+- `chat/chat.py` — chat CLI đa lượt, giữ ngữ cảnh 6 turn, lệnh `/reset /think on|off /temp X /quit`
+- `chat/quick_test.py` — kịch bản 4 lượt (2 benign + follow-up + 1 bẫy harmful + quay lại defensive), tự chấm PASS/FAIL
+```bash
+!python -m chat.quick_test --ckpt experiments/v1.1/sft.pt --config config/model/tiny.yaml
+!python -m chat.chat --ckpt experiments/v1.1/sft.pt --show-think
+```
+
 ## Cấu trúc
 - `model/` — base LM (RMSNorm, RoPE, SwiGLU, tie-weights), reasoning-ready vocab 320
 - `tokenizer/` — byte-level + special `<think>/<answer>/<user>/...`
