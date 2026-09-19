@@ -5,7 +5,7 @@ import math
 import torch
 
 from model import ModelConfig, MyAI
-from tokenizer import ByteTokenizer
+from tokenizer import ByteTokenizer, load_tokenizer
 from training.dataset import get_loaders
 from training.loss import lm_loss
 from training.checkpoint import load_checkpoint
@@ -28,7 +28,8 @@ def main(config_path: str, ckpt_path: str | None, max_batches: int = 20):
     if ckpt_path:
         load_checkpoint(ckpt_path, model, map_location=device)
     model.eval()
-    tok = ByteTokenizer()
+    _tok_cfg = full.get("tokenizer", {})
+    tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
 
     dcfg = full.get("data", {})
     try:

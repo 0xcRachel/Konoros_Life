@@ -1,32 +1,33 @@
-# Konoros-Sec small: ~30M params, GQA (8q/2kv), context 1024. Colab T4/A100.
+# Konoros-Sec medium: ~130M params, GQA (16q/4kv), ctx 2048. Cần GPU ≥16GB (A100/L4).
+# Tokenizer: BPE 16000 (scripts/train_bpe.py). KHÔNG dùng byte (vocab 320) với config này.
 model:
-  vocab_size: 320
-  d_model: 512
-  n_layers: 8
-  n_heads: 8
-  n_kv_heads: 2
-  context_length: 1024
+  vocab_size: 16000
+  d_model: 1024
+  n_layers: 12
+  n_heads: 16
+  n_kv_heads: 4
+  context_length: 2048
   dropout: 0.0
   rope_theta: 10000.0
   tie_weights: true
   norm: rmsnorm
   mlp: swiglu
-  bos_id: 258
-  eos_id: 259
-  pad_id: 256
-  unk_id: 257
+  bos_id: 2
+  eos_id: 3
+  pad_id: 0
+  unk_id: 1
 
 training:
-  batch_size: 16
-  grad_accum_steps: 4   # effective batch 64 x 1024 ctx
-  grad_checkpoint: true # fit T4 15GB
-  epochs: 3
+  batch_size: 8
+  grad_accum_steps: 8   # effective batch 64 x 2048 ctx (~131k tok/step)
+  grad_checkpoint: true
+  epochs: 1             # data GB-scale: 1 epoch đã hàng chục nghìn steps
   lr: 3e-4
   weight_decay: 0.1
   betas: [0.9, 0.95]
   grad_clip: 1.0
-  max_steps: 20000
-  warmup_steps: 500
+  max_steps: 50000
+  warmup_steps: 1000
   eval_interval: 1000
   save_interval: 2000
   device: cuda
@@ -38,12 +39,12 @@ data:
   val_path: data/processed/val.bin
 
 tokenizer:
-  type: byte
-  path: data/tokenizer/byte.json
+  type: bpe
+  path: data/tokenizer/bpe.json
 
 checkpoint:
-  dir: experiments/small/checkpoints
-  log_dir: experiments/small/logs
+  dir: experiments/medium/checkpoints
+  log_dir: experiments/medium/logs
 
 reasoning:
   enabled: false

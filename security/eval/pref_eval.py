@@ -2,18 +2,22 @@
 import torch
 
 from model import ModelConfig, MyAI
-from tokenizer import ByteTokenizer
-from training.checkpoint import load_checkpoint
+from tokenizer import ByteTokenizer, load_tokenizer
+from training.checkpoint import load_checkpoint, resolve_ckpt
 from training.dpo import load_pairs, seq_logprob_masked, build_ids
 
 
 def main(config="config/model/tiny.yaml", ckpt=None, data="data/sft/security_prefs.jsonl"):
+    import yaml
+    with open(config, encoding="utf-8") as f:
+        _tok_cfg = yaml.safe_load(f).get("tokenizer", {})
     mcfg = ModelConfig.from_yaml(config)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MyAI(mcfg).to(device).eval()
     if ckpt:
+        ckpt = resolve_ckpt(ckpt)
         load_checkpoint(ckpt, model, map_location=device)
-    tok = ByteTokenizer()
+    tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
     rows = load_pairs(data)
     win, tot = 0, 0
     with torch.no_grad():

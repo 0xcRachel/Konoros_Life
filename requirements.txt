@@ -8,6 +8,7 @@ pytest>=7.4.0
 requests>=2.31.0
 datasets>=2.16.0
 huggingface-hub>=0.20.0
+tokenizers>=0.15.0   # BPE (train_bpe.py, BPETokenizer) — chạy Colab
 # Colab GĐ2 dump-full: py7zr>=0.20.0, lxml>=4.9.0
 black>=23.0.0
 isort>=5.12.0

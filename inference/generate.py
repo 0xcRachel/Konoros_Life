@@ -5,7 +5,7 @@ import argparse
 import torch
 
 from model import ModelConfig, MyAI
-from tokenizer import ByteTokenizer
+from tokenizer import ByteTokenizer, load_tokenizer
 from training.checkpoint import load_checkpoint, check_tokenizer_compat, resolve_ckpt
 from training.rewards import parse_reasoning
 
@@ -24,12 +24,15 @@ def branch_score(text: str, new_ids: list[int]) -> float:
 
 
 def main(ckpt_path, prompt, max_new_tokens, temperature, top_k, top_p, config_path, best_of: int = 1):
+    import yaml
+    with open(config_path, encoding="utf-8") as f:
+        _tok_cfg = yaml.safe_load(f).get("tokenizer", {})
     mcfg = ModelConfig.from_yaml(config_path)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MyAI(mcfg).to(device)
     ckpt_path = resolve_ckpt(ckpt_path)
     ckpt = load_checkpoint(ckpt_path, model, map_location=device)
-    tok = ByteTokenizer()
+    tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
     check_tokenizer_compat(ckpt.get("tokenizer_meta", {}), tok)
     model.eval()
 

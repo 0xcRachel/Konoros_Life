@@ -30,6 +30,12 @@ Defensive, authorized security assistant. Không exploit / persistence / credent
 - `data/raw/web_docs.txt` — Python tutorial + secrets/hashlib + MDN Web Security (allowlist + robots.txt)
 - Lấy thêm: `python data_collectors/stackoverflow/fetch_all.py --out data/raw/so_all.jsonl --max-answers 500` (quota ẩn danh ~300 req/ngày/IP, reset hàng ngày; key miễn phí tại stackapps.com cho 10k/ngày)
 
+## Scale lên với máy 83GB RAM (BPE + medium ~130M + large ~300M)
+- `scripts/train_bpe.py` — train BPE ByteLevel (GPT-2 style, không OOV): `--vocab 16000` trên `prime_all.jsonl`
+- `tokenizer/bpe.py` — wrapper API giống ByteTokenizer; mọi entry point đọc `tokenizer.type/path` trong yaml
+- Thang model: `tiny` 3.3M (byte, thử nghiệm) → `small` ~30M (GQA, epochs 3) → `medium` ~130M (BPE, d1024/L12/ctx2048, GPU ≥16GB) → `large` ~300M (BPE, d1280/L16/GQA-20q5kv/ctx2048, GPU ≥24GB)
+- Flow: `train_bpe` → `prepare_data --tok-type bpe` → train medium/large, resume nhiều session + checkpoint ra Drive
+
 ## Học tăng cường preference (DPO, v1.2)
 - `training/dpo.py` — Direct Preference Optimization: loss `-log sigmoid(beta * margin)`, ref model frozen, mask prompt, không cần reward model
 - Data: `data/sft/security_prefs.jsonl` (8 cặp chosen/rejected: benign giúp > từ chối/khuyên bậy, harmful từ chối > tuân thủ)

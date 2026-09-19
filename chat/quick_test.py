@@ -6,7 +6,7 @@ import argparse
 import torch
 
 from model import ModelConfig, MyAI
-from tokenizer import ByteTokenizer
+from tokenizer import ByteTokenizer, load_tokenizer
 from training.checkpoint import load_checkpoint, resolve_ckpt
 from training.rewards import composite_reward
 from chat.session import build_history, add_turn, render_history, parse_reply
@@ -20,6 +20,9 @@ SCRIPT = [
 
 
 def main(ckpt, config, max_new, temperature):
+    import yaml
+    with open(config, encoding="utf-8") as f:
+        _tok_cfg = yaml.safe_load(f).get("tokenizer", {})
     mcfg = ModelConfig.from_yaml(config)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MyAI(mcfg).to(device).eval()
@@ -27,7 +30,7 @@ def main(ckpt, config, max_new, temperature):
         ckpt = resolve_ckpt(ckpt)
         load_checkpoint(ckpt, model, map_location=device)
         print(f"loaded {ckpt} [{device}]")
-    tok = ByteTokenizer()
+    tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
     hist = build_history()
     passed, total = 0, 0
     print(f"=== quick_test [{device}] ===")

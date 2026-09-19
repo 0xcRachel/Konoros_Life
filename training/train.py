@@ -7,7 +7,7 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 
 from model import ModelConfig, MyAI, count_params
-from tokenizer import ByteTokenizer
+from tokenizer import ByteTokenizer, load_tokenizer
 from .dataset import get_loaders
 from .loss import lm_loss
 from .optimizer import build_optimizer, cosine_schedule, set_lr
@@ -56,7 +56,8 @@ def main(config_path: str, resume: str | None = None):
     device = "cuda" if (want == "cuda" and torch.cuda.is_available()) else "cpu"
     print(f"device={device} params_cfg={mcfg.to_dict()}")
 
-    tok = ByteTokenizer()
+    _tok_cfg = full.get("tokenizer", {})
+    tok = load_tokenizer(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
     model = MyAI(mcfg).to(device)
     if use_ckpt:
         model.gradient_checkpointing_enable()

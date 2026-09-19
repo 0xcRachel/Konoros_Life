@@ -30,7 +30,13 @@ def iter_texts(path: str):
 
 def main(inp: str, out: str, tok_path: str | None, add_bos: bool, add_eos: bool):
     import os
-    tok = ByteTokenizer.load(tok_path) if tok_path else ByteTokenizer()
+    from .bpe import BPETokenizer
+    if tok_path and os.path.exists(tok_path):
+        with open(tok_path, encoding="utf-8") as f:
+            head = f.read(500)
+        tok = BPETokenizer.load(tok_path) if '"model"' in head else ByteTokenizer.load(tok_path)
+    else:
+        tok = ByteTokenizer()
     ids: list[int] = []
     for t in iter_texts(inp):
         ids.extend(tok.encode(t, add_bos=add_bos, add_eos=add_eos))

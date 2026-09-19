@@ -86,7 +86,9 @@ def main(config_path: str, data_path: str, base_ckpt: str | None, out: str,
 
     mcfg = ModelConfig.from_yaml(config_path)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    tok = ByteTokenizer()
+    from tokenizer import load_tokenizer as _lt
+    _tok_cfg = full.get("tokenizer", {})
+    tok = _lt(_tok_cfg.get("type", "byte"), _tok_cfg.get("path"))
     policy = MyAI(mcfg).to(device)
     if base_ckpt and os.path.exists(base_ckpt):
         load_checkpoint(base_ckpt, policy, map_location=device)
