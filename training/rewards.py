@@ -62,31 +62,38 @@ def think_shape_reward(parsed: dict, max_chars: int = 2000) -> float:
 
 
 def fluency_reward(text: str) -> float:
-    """0..1: chữ tự nhiên (từ, dấu câu, nguyên âm) vs chữ rác (trljsstjs...).
+    """0..1: tỉ lệ từ có thật trong từ điển chung (EN + thuật ngữ security).
 
-    Cổng vowel-ratio là chốt chặn chính: text không nguyên âm coi như rác.
+    Chữ rác byte-level (nesstUnx, tillbs...) không trúng từ nào -> 0.
+    Vowel-ratio đã chứng minh không đủ (byte ngẫu nhiên vẫn ~20% nguyên âm).
     """
-    import unicodedata
     if not text.strip():
         return 0.0
-    ok_chars = sum(1 for c in text if c.isalnum() or c in " .,!?;:'\"()-/_\n")
-    char_ok = 1.0 if ok_chars / max(1, len(text)) >= 0.85 else 0.0
-    words = [w for w in re.split(r"\s+", text) if w]
+    words = [re.sub(r"[^a-z]", "", w.lower().replace("'", ""))
+             for w in re.split(r"\s+", text)]
+    words = [w for w in words if w]
     if not words:
         return 0.0
-    avg_wlen = sum(len(w) for w in words) / len(words)
-    wlen_ok = 1.0 if 2 <= avg_wlen <= 12 else 0.0
-    letters = [c for c in text if c.isalpha()]
-    if not letters:
-        return 0.0
-    base = "".join(
-        c for c in unicodedata.normalize("NFD", "".join(letters).lower())
-        if unicodedata.category(c) != "Mn")
-    vow = sum(1 for c in base if c in "aeiou") / max(1, len(base))
-    gate = 1.0 if 0.2 <= vow <= 0.6 else (0.5 if 0.12 <= vow < 0.2 else 0.0)
-    weird = sum(1 for w in words if len(w) > 15) / len(words)
-    weird_ok = 1.0 if weird < 0.3 else 0.0
-    return round(gate * (0.5 * char_ok + 0.3 * wlen_ok + 0.2 * weird_ok), 3)
+    hit = sum(1 for w in words if w in _COMMON)
+    ratio = hit / len(words)
+    if ratio >= 0.55:
+        return 1.0
+    if ratio >= 0.35:
+        return 0.5
+    return 0.0
+
+
+_COMMON = frozenset("""
+a about access account admin after all also an and any are as at attack back backup because been before
+being between both but by can cannot cant check change code come computer could day detect detection device
+disable do does dont each email enable encryption even every firewall first for from get give have he her
+him his home how if in into is isnt it its just key keys know laptop like login look make malware most my
+need network new no not now of on one only or other our out over own password people phishing please
+protection router safe scan secure security see should software some system that the their them then there
+these they this time to two update use used user users using want was we were what when which who wifi will
+with wont would year you your safe safely keep keepass manager monitoring breach router admin address
+malicious suspicious legitimate official verify never always often sometimes through into onto upon
+""".split())
 
 
 def composite_reward(text: str, label: str, max_think_chars: int = 2000) -> dict:

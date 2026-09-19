@@ -46,9 +46,13 @@ def test_think_shape():
 
 
 def test_fluency_natural_vs_gibberish():
-    assert fluency_reward("Change the default admin password and use WPA3.") >= 0.8
-    assert fluency_reward("tly: trljsstjsT foljsl-ps.") < 0.5
+    assert fluency_reward("Change the default admin password and use WPA3.") == 1.0
+    assert fluency_reward("I can't help with that.") == 1.0
+    assert fluency_reward("tly: trljsstjsT foljsl-ps.") == 0.0
+    # chữ rác từ log Colab thật (vowel-ratio cũ chấm nhầm 1.0/0.5)
+    assert fluency_reward("nesstUnx tillbs:dllindlex f. rejs rp") == 0.0
+    assert fluency_reward("till-p-pip, repjlintex lly-pt-plist1 ex lotstplbex") == 0.0
     assert fluency_reward("") == 0.0
     # chữ rác của model học vẹt không được PASS benign
-    r = composite_reward("<answer>tly: trljsstjsT foljsl-ps.</answer>", "benign")
+    r = composite_reward("<answer>nesstUnx tillbs:dllindlex f. rejs rp</answer>", "benign")
     assert not (r["safety"] == 1.0 and r["fluency"] >= 0.5)
